@@ -1,0 +1,253 @@
+@use '../variables' as v;
+@use '../mixins/global-mixin' as *;
+
+.root {
+  @extend %useScrollbarStyle;
+  @include useFlexbox(column, flex-start, stretch);
+  overflow: auto;
+  @include useSquareSize(100%);
+  padding: 0;
+  font-size: 0.75rem;
+  font-family: v.$primary_font;
+}
+
+.left-side {
+  @include useFlexbox(column);
+  background-color: darken(v.$primary_color, 3%);
+  flex: 1 1 10%;
+}
+
+.site-logo {
+  display: flex;
+  width: 10rem;
+  height: 7rem;
+
+  &__img {
+    @include useSquareSize(100%);
+    object-fit: cover;
+  }
+}
+
+.right-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+  flex: 1 0 auto;
+
+  &__content {
+    width: 100%;
+  }
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+
+  &__title {
+    font-family: 'Tillium web';
+    font-size: 1.5rem;
+  }
+  &__process-text {
+    font-size: 1.5rem;
+    font-family: v.$primary_font;
+  }
+}
+
+.auth {
+  &__text {
+    color: rgb(64, 63, 68);
+    font-weight: 400;
+    font-size: 0.68rem;
+  }
+
+  &__link {
+    color: v.$primary_color;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  &__forgot-password {
+    align-self: flex-end;
+  }
+}
+
+.auth-form-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.auth-error-msg {
+  color: rgb(247, 9, 9);
+  background-color: rgb(250, 235, 215);
+  padding-block: 0.5rem;
+  text-align: center;
+  border: 1px solid #f2daba;
+  box-shadow: 0 0 9px 2px rgb(255, 228, 196);
+  margin-block: 1rem 0;
+}
+
+.auth-success-msg {
+  color: #00551a;
+  background-color: #b0fff7;
+  padding-block: 0.5rem;
+  text-align: center;
+  border: 1px solid #bad7f2;
+  box-shadow: 0 0 9px 2px #c4fdff;
+  margin-block: 1rem 0;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+
+  @at-root {
+    @include useFormFloating;
+  }
+}
+
+@include useLoadSpinner-md-1();
+
+.btn-submit {
+  width: 100%;
+  font-size: 0.98rem;
+  padding: 0.7rem 1.7rem;
+}
+
+.action {
+  @include useFlexbox();
+}
+
+.action-btn {
+  display: inline-block;
+  padding: 0.5em;
+  font-size: 0.9rem;
+  min-width: 9rem;
+  font-weight: bold;
+  font-family: serif;
+  border: 1px solid lighten(v.$primary_color, 20%);
+  box-shadow: 1px 1px 8px darken(v.$primary_color, 50%);
+  color: #eee;
+  cursor: pointer;
+  margin-top: 1rem;
+  background-image: linear-gradient(
+    to bottom right,
+    lighten(v.$primary_color, 10%),
+    lighten(v.$primary_color, 5%) 50%,
+    lighten(v.$primary_color, 10%) 90%
+  );
+
+  &:hover,
+  &:active {
+    background-color: v.$secondary_color;
+    border-color: #a452bbdb;
+    box-shadow: 1px 1px 8px #500053;
+    background-image: linear-gradient(
+      to bottom right,
+      #9b55ae,
+      #4d0082 50%,
+      #961aa8 90%
+    );
+  }
+
+  &:active {
+    background-image: linear-gradient(
+      to top left,
+      #750a84,
+      #350b34 50%,
+      #aa0fa8 80%
+    );
+  }
+}
+.root_error {
+  .left-side {
+    background-color: v.$danger_color;
+  }
+  .right-side {
+    background-image: linear-gradient(
+      rgba(255, 0, 106, 0.303) 0%,
+      rgb(255, 255, 255) 50%,
+      rgba(139, 0, 65, 0.323) 100%
+    );
+  }
+
+  .action-btn-error {
+    border: 1px solid #7b3131;
+    background-color: #860000;
+    box-shadow: 1px 1px 8px #680000;
+    color: #ffffffde;
+    background-image: linear-gradient(
+      to bottom right,
+      #4c1d00,
+      #e31702 50%,
+      #370106 90%
+    );
+
+    &:hover,
+    &:active {
+      background-color: #b70303;
+      border-color: #9b451b;
+      box-shadow: 1px 1px 8px #c10c0c;
+      color: #fff;
+      background-image: linear-gradient(
+        to left,
+        #5a0212,
+        #df0a0a 50%,
+        #a40000 80%
+      );
+    }
+
+    &:active {
+      background-image: linear-gradient(
+        to top left,
+        #920440,
+        #af0b03 50%,
+        #6b0014 80%
+      );
+      color: rgb(255, 240, 240);
+    }
+  }
+}
+
+@media (min-width: 510px) {
+  .root {
+    background-image: linear-gradient(
+      rgba(0, 0, 255, 0.152) 0%,
+      rgb(255, 255, 255) 50%,
+      rgba(0, 0, 139, 0.179) 100%
+    );
+  }
+
+  .left-side {
+    padding-block-start: 1rem;
+    justify-content: flex-start;
+  }
+
+  .right-side {
+    align-items: center;
+    flex-basis: 50%;
+    padding-inline: 0;
+    &__content {
+      width: 80%;
+    }
+  }
+}
+
+@media (min-width: 680px) {
+  .root {
+    flex-direction: row;
+  }
+  .right-side {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 350px) {
+  .right-side {
+    justify-content: flex-start;
+  }
+}

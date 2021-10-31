@@ -1,0 +1,22 @@
+@use '../../variables' as v;
+@use '../../mixins/global-mixin' as *;
+
+.main-page {
+  @include useFlexbox(column, $jt: none, $al: none);
+  flex: 1 1 auto;
+  background-color: #fffdfd;
+  overflow: hidden;
+  position: relative;
+}
+
+.main-content-root {
+  @include useSquareSize(100%);
+  @extend %useScrollbarStyle;
+  overflow: auto;
+}
+
+.main-content {
+  @include useFlexbox(column, $jt: none, $al: center);
+  padding: 1rem;
+  min-width: 280px;
+}
