@@ -1,5 +1,5 @@
-@use '../../../mixins/global-mixin' as *;
-@use '../../../variables' as v;
+@use '../../../00-globals/global-mixin' as *;
+@use '../../../00-globals/variables' as v;
 
 %border-radius-base {
   border-radius: 0.5rem;
@@ -8,7 +8,7 @@
   padding: 1rem;
 }
 
-.candidate-modal-container {
+.candidate_modal_container {
   @include useFlexbox(column);
   @include usePosition(absolute, 0, 0);
   @include useSquareSize(100%);
@@ -17,7 +17,7 @@
   background-color: rgba(darken(v.$primary_color, 5%), 0.39);
 }
 
-.candidate-modal {
+.candidate_modal {
   @extend %padding-1rem;
   @extend %border-radius-base;
   @include useFlexbox(column, $jt: none, $inline: 1);
@@ -28,7 +28,7 @@
   color: #121313;
   overflow: auto;
 
-  &__close-btn {
+  &__close_btn {
     @extend %padding-1rem;
     @include usePosition(absolute, 0.1rem, $right: 0.1rem);
     @include useFlexbox(none, $inline: 1);
@@ -47,18 +47,20 @@
   }
 }
 
-.candidate-modal-profile {
-  max-width: 20rem;
-  max-height: 25rem;
+.candidate_modal_profile {
+  width: 15rem;
+  height: 15rem;
+  position: relative;
+  background-color: lighten(v.$primary_color, 61%);
+  @extend %border-radius-base;
   &__picture {
     @extend %border-radius-base;
-    box-shadow: 0 0 0.26rem 0.01rem rgba(v.$primary_color, 0.7);
     @include useSquareSize(100%);
     object-fit: cover;
   }
 }
 
-.candidate-full-details {
+.candidate_full_details {
   @include useFlexbox(column, none, none);
   @extend %border-radius-base;
   box-shadow: 0 0 0.26rem 0.01rem rgba(v.$primary_color, 0.3);

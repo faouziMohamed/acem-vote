@@ -10,8 +10,8 @@
 </div>
 */
 @use '../common' as *;
-@use '../../mixins/global-mixin' as *;
-@use '../../variables' as v;
+@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/variables' as v;
 
 %useSameFlexbox {
   @include useFlexbox();
@@ -62,7 +62,7 @@
   }
 }
 
-.label-switch--txt {
+.label_switch__txt {
   z-index: 1;
 }
 
@@ -73,7 +73,7 @@
       background-color: v.$primary_color;
       border-color: v.$primary_color;
     }
-    &.partially-checked::before {
+    &.partially_checked::before {
       content: '\f146';
     }
   }

@@ -1,5 +1,5 @@
-@use '../../variables' as v;
-@use '../../mixins/global-mixin' as *;
+@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/variables' as v;
 
 .preloader {
   position: absolute;

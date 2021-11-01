@@ -1,12 +1,12 @@
-@use '../variables' as v;
-@use '../mixins/global-mixin' as *;
+@use '../00-globals/variables' as v;
+@use '../00-globals/global-mixin' as *;
 
 %left-side-common {
   overflow: hidden;
   height: 100%;
 }
 
-.left-side-parent {
+.left_side_parent {
   $color: rgba(darken(v.$primary_color, 30%), 40%);
   display: block;
   @include useSquareSize(100%);
@@ -15,12 +15,12 @@
   background-color: $color;
   transition: transform 250ms ease;
   z-index: -1;
-  &.on-top {
+  &.on_top {
     z-index: v.$zindex_level_one;
   }
 }
 
-.left-side {
+.left_side {
   @extend %left-side-common;
   background-color: #f4fdff;
   flex: 0 0 v.$left-side-width;
@@ -39,25 +39,25 @@
     position: relative;
     height: 100%;
     overflow: auto;
-
+    position: relative;
     @extend %left-side-common;
   }
 
-  &__site-logo-link,
+  &__site_logo_link,
   &__title,
-  &__site-nav-link {
+  &__site_nav_link {
     padding-inline: 1.5rem;
   }
-  &__username-wrap,
-  &__site-logo-link {
+  &__username_wrap,
+  &__site_logo_link {
     padding-block: 1.5rem;
   }
-  &__site-logo-link {
+  &__site_logo_link {
     position: relative;
     display: inline-flex;
     padding-block-end: 0;
   }
-  &__user-profil-link {
+  &__user_profile_link {
     font-size: 0.988rem;
     border-radius: 0.5rem;
     background-color: rgba(0, 38, 165, 0.071);
@@ -68,10 +68,11 @@
     gap: 5px;
     padding: 0.99rem;
   }
-  &__img-profil-wrapper {
+  &__img_profile_wrapper {
     @include useSquareSize(2.5rem);
+    position: relative;
   }
-  &__userprofil-pic {
+  &__userprofile_pic {
     background-color: rgba(0, 38, 165, 0.2);
     border-radius: 50%;
     @include useSquareSize(100%);
@@ -79,7 +80,7 @@
   }
 }
 
-.site-nav {
+.site_nav {
   &__list {
     list-style-type: none;
   }
@@ -102,13 +103,13 @@
     background-color: rgba(v.$primary_color, 0.1);
   }
 
-  &__active-tab {
+  &__active_tab {
     color: v.$primary_color;
     border-color: transparent;
     background-color: rgba(v.$primary_color, 0.15);
   }
 
-  &__active-tab::after {
+  &__active_tab::after {
     $radius: 0.255rem;
     display: block;
     @include usePosition(absolute, $top: 0, $right: 0, $bottom: 0);
@@ -125,7 +126,7 @@
     position: relative;
   }
 
-  .left-side-parent {
+  .left_side_parent {
     @extend %common-props;
     display: block;
     width: v.$left-side-width;
@@ -133,13 +134,13 @@
     z-index: v.$zindex_level_one;
   }
 
-  .left-side {
+  .left_side {
     @extend %common-props;
     transform: translate(0);
     z-index: v.$zindex_level_one;
   }
 
-  .burger-menu {
+  .burger_menu {
     @extend %common-props;
     width: 0;
     transform: translateY(-1000%);

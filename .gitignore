@@ -7,7 +7,6 @@
 
 # testing
 /coverage
-
 # next.js
 /.next/
 /out/
@@ -32,3 +31,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+.styles
+.env.production
+tests

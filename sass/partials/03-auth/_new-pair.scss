@@ -1,6 +1,6 @@
-@use '../mixins/global-mixin' as *;
+@use '../00-globals/global-mixin' as *;
 
-.new-pair {
+.new_pair {
   background-image: linear-gradient(
     rgba(0, 0, 255, 0.303) 0%,
     rgb(255, 255, 255) 50%,
@@ -16,7 +16,7 @@
     }
   }
 
-  .page-header {
+  .page_header {
     text-align: center;
   }
 }

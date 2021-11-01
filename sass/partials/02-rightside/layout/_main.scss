@@ -1,7 +1,7 @@
-@use '../../variables' as v;
-@use '../../mixins/global-mixin' as *;
+@use '../../00-globals/variables' as v;
+@use '../../00-globals/global-mixin' as *;
 
-.main-page {
+.main_page {
   @include useFlexbox(column, $jt: none, $al: none);
   flex: 1 1 auto;
   background-color: #fffdfd;
@@ -9,13 +9,14 @@
   position: relative;
 }
 
-.main-content-root {
+.main_content_root {
   @include useSquareSize(100%);
   @extend %useScrollbarStyle;
   overflow: auto;
+  position: relative;
 }
 
-.main-content {
+.main_content {
   @include useFlexbox(column, $jt: none, $al: center);
   padding: 1rem;
   min-width: 280px;

@@ -1,5 +1,5 @@
-@use '../../mixins/global-mixin' as *;
-@use '../../variables' as v;
+@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/variables' as v;
 
 %useSameFlexbox {
   @include useFlexbox();
@@ -19,7 +19,7 @@
 </div>
 */
 
-.alert-dialog-parent {
+.alert_dialog_parent {
   @include usePosition(absolute, 0, 0);
   @include useFlexbox;
   @include useSquareSize(100%);
@@ -28,7 +28,7 @@
   padding: 1rem;
 }
 
-.alert-dialog {
+.alert_dialog {
   display: flex;
   flex-direction: column;
   background-color: rgb(251, 255, 252);
@@ -48,21 +48,21 @@
   font-weight: 500;
 }
 
-.alert-dialog-title {
+.alert_dialog_title {
   border-bottom: 1px solid #02192d08;
 }
 
-.alert-dialog-body {
+.alert_dialog_body {
   padding-block: 0.4rem;
 }
 
-.alert-dialog-btn-container {
+.alert_dialog_btn_container {
   display: flex;
   justify-content: center;
   gap: 0.3rem;
 }
 
-.alert-dialog-btn {
+.alert_dialog_btn {
   display: block;
   padding: 0.3rem;
   min-width: 0.5rem;
@@ -87,7 +87,7 @@
   }
 }
 
-.btn-success {
+.btn_success {
   background-color: #57ff89;
   background-image: linear-gradient(
     to bottom left,
@@ -109,7 +109,7 @@
   }
 }
 
-.btn-cancel {
+.btn_cancel {
   background-image: linear-gradient(
     to bottom left,
     #ffffff61,
@@ -129,7 +129,7 @@
   }
 }
 
-.btn-error {
+.btn_error {
   background-color: #ff578f;
   background-image: linear-gradient(
     to bottom left,

@@ -1,11 +1,38 @@
-@use '../../../mixins/global-mixin' as *;
-@use '../../../variables' as v;
+@use '../../../00-globals/global-mixin' as *;
+@use '../../../00-globals/variables' as v;
 
-.candidate-cards-wrapper {
+.view_mode {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.2rem 0.5rem;
+  background-color: rgba(v.$secondary_color, 25%);
+  @include usePosition(absolute, 0, $right: 0);
+  border-radius: 0.3rem;
+
+  &_btn {
+    font-size: 1rem;
+    @include useSquareSize(1.7rem);
+    background-color: #f3f3f3;
+    border-radius: 0.2rem;
+    border: 1px solid rgb(163, 163, 163);
+    color: #005b6b;
+    &:disabled {
+      color: #44858f;
+    }
+    &:hover {
+      background-color: #dfdddd;
+    }
+  }
+}
+
+.candidate_cards_wrapper {
+  padding-block-start: 2.5rem;
   @include useFlexbox();
   flex-wrap: wrap;
   gap: 0.5rem;
   flex: 1 1 100%;
+  position: relative;
+  width: 100%;
 }
 
 %radius-6rem {
@@ -16,7 +43,7 @@
   @include useSquareSize(100%);
 }
 
-.candidate-card {
+.candidate_card {
   @include useFlexbox(column, $al: center, $jt: none, $inline: 1);
   @extend %radius-6rem;
   font-family: 'Titillium Web', sans-serif;
@@ -37,7 +64,7 @@
     flex: 1 0 100%;
   }
 
-  &__more-details {
+  &__more_details {
     @include useFlexbox(column);
     @include usePosition(absolute, $top: 0, $left: 0);
     @extend %full-size;
@@ -50,14 +77,14 @@
 
   &:is(:hover, :focus) {
     box-shadow: 0 0 0.2rem 0.05rem v.$primary_color;
-    .candidate-card__more-details {
+    .candidate_card__more_details {
       display: flex;
     }
     @include useHovered-info-indicator();
   }
 }
 
-.more-details-btn {
+.more_details_btn {
   $color: rgba(2, 29, 80, 0.85);
   display: block;
   padding: 0.5rem 0.7rem;
@@ -75,20 +102,19 @@
   }
 }
 
-.candidate-figure {
-  &__top-details {
-    width: 13.875rem;
-    height: 14.375rem;
-    position: relative;
-  }
-  &__picture {
-    @extend %radius-6rem;
-    @extend %full-size;
-    object-fit: cover;
-  }
+.candidate_figure__top_details {
+  width: 13.875rem;
+  height: 14.375rem;
+  position: relative;
 }
 
-.candidate-description {
+.candidate_figure__picture {
+  @extend %radius-6rem;
+  @extend %full-size;
+  object-fit: cover;
+}
+
+.candidate_description {
   @include useFlexbox(column, $al: center, $jt: none);
   border-block-end: 1px solid #7e7c7c;
 
@@ -100,6 +126,10 @@
   }
 }
 
-.vote-btn {
+.vote_btn {
   align-self: center;
+}
+
+.candidate_card_detail {
+  text-align: center;
 }

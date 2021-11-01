@@ -22,6 +22,10 @@ html {
   background-color: #f9feff;
   font-family: v.$primary_font;
   font-weight: 400;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
   ::selection {
     background-color: #00209edb;
     color: #fff;

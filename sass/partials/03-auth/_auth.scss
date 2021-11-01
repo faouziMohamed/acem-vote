@@ -1,34 +1,39 @@
-@use '../variables' as v;
-@use '../mixins/global-mixin' as *;
+@use '../00-globals/variables' as v;
+@use '../00-globals/global-mixin' as *;
 
 .root {
   @extend %useScrollbarStyle;
   @include useFlexbox(column, flex-start, stretch);
   overflow: auto;
   @include useSquareSize(100%);
+  position: absolute;
+  top: 0;
+  left: 0;
   padding: 0;
   font-size: 0.75rem;
   font-family: v.$primary_font;
 }
 
-.left-side {
+.left_side {
   @include useFlexbox(column);
   background-color: darken(v.$primary_color, 3%);
   flex: 1 1 10%;
 }
 
-.site-logo {
-  display: flex;
-  width: 10rem;
-  height: 7rem;
-
+.site_logo {
+  &__link {
+    display: flex;
+    width: 10rem;
+    height: 7rem;
+    position: relative;
+  }
   &__img {
     @include useSquareSize(100%);
     object-fit: cover;
   }
 }
 
-.right-side {
+.right_side {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -37,18 +42,19 @@
 
   &__content {
     width: 100%;
+    position: relative;
   }
 }
 
-.page-header {
+.page_header {
   display: flex;
   flex-direction: column;
 
   &__title {
-    font-family: 'Tillium web';
+    font-family: Ubuntu, Roboto, 'Open Sans', 'Public Sans', serif;
     font-size: 1.5rem;
   }
-  &__process-text {
+  &__process_text {
     font-size: 1.5rem;
     font-family: v.$primary_font;
   }
@@ -66,19 +72,20 @@
     text-decoration: none;
     font-weight: 600;
   }
-  &__forgot-password {
+  &__forgot_password {
     align-self: flex-end;
   }
 }
 
-.auth-form-wrapper {
+.auth_form_wrapper {
   position: relative;
   display: flex;
   width: 100%;
   flex-direction: column;
+  padding: 0.3rem;
 }
 
-.auth-error-msg {
+.auth_error_msg {
   color: rgb(247, 9, 9);
   background-color: rgb(250, 235, 215);
   padding-block: 0.5rem;
@@ -88,7 +95,7 @@
   margin-block: 1rem 0;
 }
 
-.auth-success-msg {
+.auth_success_msg {
   color: #00551a;
   background-color: #b0fff7;
   padding-block: 0.5rem;
@@ -99,7 +106,7 @@
   font-weight: 600;
 }
 
-.auth-form {
+.auth_form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -112,7 +119,7 @@
 
 @include useLoadSpinner-md-1();
 
-.btn-submit {
+.btn_submit {
   width: 100%;
   font-size: 0.98rem;
   padding: 0.7rem 1.7rem;
@@ -122,7 +129,7 @@
   @include useFlexbox();
 }
 
-.action-btn {
+.action_btn {
   display: inline-block;
   padding: 0.5em;
   font-size: 0.9rem;
@@ -164,10 +171,10 @@
   }
 }
 .root_error {
-  .left-side {
+  .left_side {
     background-color: v.$danger_color;
   }
-  .right-side {
+  .right_side {
     background-image: linear-gradient(
       rgba(255, 0, 106, 0.303) 0%,
       rgb(255, 255, 255) 50%,
@@ -175,7 +182,7 @@
     );
   }
 
-  .action-btn-error {
+  .action_btn_error {
     border: 1px solid #7b3131;
     background-color: #860000;
     box-shadow: 1px 1px 8px #680000;
@@ -222,12 +229,12 @@
     );
   }
 
-  .left-side {
+  .left_side {
     padding-block-start: 1rem;
     justify-content: flex-start;
   }
 
-  .right-side {
+  .right_side {
     align-items: center;
     flex-basis: 50%;
     padding-inline: 0;
@@ -241,13 +248,13 @@
   .root {
     flex-direction: row;
   }
-  .right-side {
+  .right_side {
     justify-content: center;
   }
 }
 
 @media (max-width: 350px) {
-  .right-side {
+  .right_side {
     justify-content: flex-start;
   }
 }

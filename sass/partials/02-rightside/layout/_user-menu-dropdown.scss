@@ -1,5 +1,5 @@
-@use '../../variables' as v;
-@use '../../mixins/global-mixin' as *;
+@use '../../00-globals/variables' as v;
+@use '../../00-globals/global-mixin' as *;
 
 %useCircularRadius {
   border-radius: 50%;
@@ -17,7 +17,7 @@
   text-align: center;
 }
 
-.user-profil-thumb {
+.user_profil_thumb {
   @extend %useCircularRadius;
   @include useSquareSize(100%);
   border: 1px solid #b5c2c2;
@@ -27,7 +27,7 @@
   background-color: lighten(v.$primary_color, 65%);
 }
 
-.user-menu-card {
+.user_menu_card {
   @extend %useRadius-0_6rem;
   @extend %useZindexLevelOne;
   @include usePosition(absolute, $right: 0, $top: calc(100% + 0.6rem));

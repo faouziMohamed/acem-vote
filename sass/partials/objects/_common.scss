@@ -1,5 +1,5 @@
-@use '../mixins/global-mixin' as *;
-@use '../variables' as v;
+@use '../00-globals/global-mixin' as *;
+@use '../00-globals/variables' as v;
 
 %useCheckboxContainer {
   position: relative;

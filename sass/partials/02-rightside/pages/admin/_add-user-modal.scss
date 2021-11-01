@@ -1,11 +1,11 @@
-@use '../../../variables' as v;
-@use '../../../mixins/global-mixin' as *;
+@use '../../../00-globals/variables' as v;
+@use '../../../00-globals/global-mixin' as *;
 
-.add-user-form {
+.add_user_form {
   position: relative;
 }
 
-.admin-modal {
+.admin_modal {
   @extend %modalContainerDefault;
   display: flex;
   background-color: rgba(#333, 90%);
@@ -23,29 +23,29 @@
   }
 }
 
-.add-user-modal {
+.add_user_modal {
   background-color: #eee;
   width: 60%;
   max-width: 39.75rem;
   padding: 1rem;
 }
 
-.form-inputs {
+.form_inputs {
   width: 100%;
   border: none;
 }
 
-.input-checkbox-container {
+.input_checkbox_container {
   display: flex;
   gap: 5px;
 }
 
-.checkbox-switcher {
+.checkbox_switcher {
   position: relative;
   @include useFlexbox(none, none, center, 1);
 }
 
-.label-switch {
+.label_switch {
   @include useFlexbox(row, flex-start, center);
   gap: 3px;
   padding: 0.3rem 0.5rem;
@@ -57,7 +57,7 @@
   font-weight: 900;
   font-size: 0.87rem;
 
-  &--txt {
+  &__txt {
     color: #333;
   }
 }
@@ -92,11 +92,11 @@
   }
 }
 
-.checkbox-slider:checked + .slider {
+.checkbox_slider:checked + .slider {
   background-color: lighten(v.$secondary_color, 40%);
 }
 
-.checkbox-slider:checked + .slider::before {
+.checkbox_slider:checked + .slider::before {
   content: '';
   @include useFlexbox(none, none, center);
   transform: translateX(1.3rem);
@@ -104,7 +104,7 @@
   box-shadow: 0 0 0.1rem 1px lighten(adjust-hue(v.$secondary_color, 10deg), 3%);
 }
 
-.form-btn-container {
+.form_btn_container {
   display: flex;
   justify-content: flex-end;
   padding-block-start: 0.5rem;
@@ -112,13 +112,13 @@
 }
 
 @media (max-width: 490px) {
-  .add-user-modal {
+  .add_user_modal {
     width: 90%;
   }
 }
 
 @media (max-width: 300px) {
-  .add-user-modal {
+  .add_user_modal {
     width: 100%;
   }
 }

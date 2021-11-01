@@ -1,7 +1,7 @@
-@use '../../../variables' as v;
-@use '../../../mixins/global-mixin' as *;
+@use '../../../00-globals/variables' as v;
+@use '../../../00-globals/global-mixin' as *;
 
-.chart-btn-tab-wrapper {
+.chart_btn_tab_wrapper {
   @include useFlexbox(column, $jt: none);
   width: 50%;
   background-color: rgb(246, 251, 255);
@@ -10,14 +10,14 @@
   max-height: 26rem;
 }
 
-.btn-tab-container {
+.btn_tab_container {
   @include useFlexbox(row);
   gap: 1px;
   flex: 1;
   width: 70%;
 }
 
-.btn-tab {
+.btn_tab {
   $btn-radius: 5px;
   flex: 1 0;
   padding: 0.9rem 1rem;

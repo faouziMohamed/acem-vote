@@ -1,7 +1,13 @@
 .hidden {
   display: none;
 }
-.prevent-scroll {
+.prevent_scroll {
   overflow: hidden;
   height: 100vh;
+}
+
+.blur {
+  > * {
+    filter: blur(1.5px);
+  }
 }

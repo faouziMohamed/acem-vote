@@ -1,10 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Router from 'next/router';
 
 import AutoTypingText from '../components/effects/auto-typing-text';
+import { BubbleLoader } from '../components/spinners/bubble-loader';
+import FuturaSpinner from '../components/spinners/futura';
+// import FuturaSpinner from '../components/spinners/futura';
+import { useUser } from '../lib/hooks/hooks';
 import style from '../sass/home.module.scss';
 
 export default function Home() {
+  const [user, { loading }] = useUser();
+  if (loading) return <BubbleLoader />;
+  if (user) {
+    Router.push('/vote');
+    return <FuturaSpinner />;
+  }
   return (
     <div className={style.home_parent}>
       <div className={style.page_overlay}></div>
@@ -63,11 +74,8 @@ function AppDescription() {
         <p className={style.main_content__col_1__text}>
           Votes du bureau Exécutif 2021/2022
         </p>
-        <p className={style.main_content__col_1__text}>
-          {/* <AutoTypingText listOfWords={['']} /> */}
-        </p>
         <p className={`${style.main_content__col_1__text} ${style.last_block}`}>
-          Vote en ligne,{' '}
+          Vote en ligne{' '}
           <AutoTypingText listOfWords={['Crypté.', 'Sécurisé.']} />
         </p>
       </section>
