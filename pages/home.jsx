@@ -1,24 +1,40 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
+import { useState } from 'react';
+import Countdown from 'react-countdown';
 
 import AutoTypingText from '../components/effects/auto-typing-text';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
 import FuturaSpinner from '../components/spinners/futura';
-// import FuturaSpinner from '../components/spinners/futura';
 import { useUser } from '../lib/hooks/hooks';
 import style from '../sass/home.module.scss';
+import CountdownView from './countdown';
 
 export default function Home() {
   const [user, { loading }] = useUser();
+  const [showCountdown, setShowCountdown] = useState(true);
+
   if (loading) return <BubbleLoader />;
   if (user) {
     Router.push('/vote');
     return <FuturaSpinner />;
   }
+
+  const Renderer = (props) => (
+    <CountdownView {...props} setShowCountdown={setShowCountdown} />
+  );
   return (
     <div className={style.home_parent}>
-      <div className={style.page_overlay}></div>
+      <div className={style.page_overlay} />
+      {showCountdown && (
+        <Countdown
+          date={new Date('2021-12-31T00:00:00')}
+          onComplete={() => Router.push('/vote')}
+          renderer={Renderer}
+        />
+      )}
+
       <div className={`${style.root} root`}>
         <HomeNavbar />
         <main className={style.main_content}>

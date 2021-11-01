@@ -1,115 +1,121 @@
 @use '../00-globals/variables' as v;
 @use '../00-globals/global-mixin' as *;
 
-%left-side-common {
-  overflow: hidden;
-  height: 100%;
-}
-
 .left_side_parent {
-  $color: rgba(darken(v.$primary_color, 30%), 40%);
   display: block;
   @include useSquareSize(100%);
-  @include usePosition(absolute, 0, 0);
-  transform: translate(0);
-  background-color: $color;
-  transition: transform 250ms ease;
-  z-index: -1;
-  &.on_top {
+  transition: all 250ms ease;
+  max-width: v.$left-side-width;
+  flex: 0;
+  width: 0;
+
+  &.left_pane_oppened {
+    display: block;
+    width: v.$left-side-width;
     z-index: v.$zindex_level_one;
   }
 }
 
 .left_side {
-  @extend %left-side-common;
-  background-color: #f4fdff;
-  flex: 0 0 v.$left-side-width;
+  height: 100%;
   width: v.$left-side-width;
+  overflow: hidden;
+  background-color: #f4fdff;
   border-inline-end: 1px solid v.$light_gray;
-  transition: transform 0.5s cubic-bezier(1, 0.68, 0, 1.1) 50ms;
-  @include usePosition(absolute, 0, 0, $bottom: 0);
   z-index: v.$zindex_level_one;
   @extend %useScrollbarStyle;
-
-  &__closed {
-    transform: translate(-100%);
-  }
+  transition: all 250ms ease;
 
   &__header {
     position: relative;
     height: 100%;
-    overflow: auto;
-    position: relative;
-    @extend %left-side-common;
-  }
-
-  &__site_logo_link,
-  &__title,
-  &__site_nav_link {
-    padding-inline: 1.5rem;
-  }
-  &__username_wrap,
-  &__site_logo_link {
-    padding-block: 1.5rem;
-  }
-  &__site_logo_link {
-    position: relative;
-    display: inline-flex;
-    padding-block-end: 0;
-  }
-  &__user_profile_link {
-    font-size: 0.988rem;
-    border-radius: 0.5rem;
-    background-color: rgba(0, 38, 165, 0.071);
-    color: rgb(43, 43, 43);
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    gap: 5px;
-    padding: 0.99rem;
-  }
-  &__img_profile_wrapper {
-    @include useSquareSize(2.5rem);
-    position: relative;
-  }
-  &__userprofile_pic {
-    background-color: rgba(0, 38, 165, 0.2);
-    border-radius: 50%;
-    @include useSquareSize(100%);
-    object-fit: scale-down;
+    overflow: hidden;
   }
 }
 
+.user_picture {
+  @include useSquareSize(2.5rem);
+  position: relative;
+}
+
+.user_picture__img {
+  background-color: rgba(0, 38, 165, 0.2);
+  border-radius: 50%;
+  @include useSquareSize(100%);
+  object-fit: scale-down;
+}
+
+.profile_link {
+  font-size: 0.988rem;
+  border-radius: 0.5rem;
+  background-color: rgba(0, 38, 165, 0.071);
+  color: rgb(43, 43, 43);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 5px;
+  padding: 0.99rem;
+}
+
+.home_link,
+.left_side__title,
+.left_side__site_nav_link {
+  padding-inline: 1.5rem;
+}
+
+.username_wrap,
+.home_link {
+  padding-block: 1.5rem;
+}
+
+.home_link {
+  position: relative;
+  display: inline-flex;
+  align-self: center;
+  padding-block-end: 0;
+  margin-inline: 1.5rem 0;
+  width: 7rem;
+  height: 5rem;
+}
+
+.left_side__site_logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .site_nav {
   &__list {
     list-style-type: none;
   }
+}
 
-  &__link {
-    display: flex;
-    align-items: center;
-    padding: 0.3rem 3rem;
-    padding-block: 0.8rem;
-    color: rgb(75, 75, 75);
-    position: relative;
-    text-decoration: none;
-    font-weight: 600;
-    gap: 1rem;
-    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    height: 3rem;
-  }
-
-  &__link:hover {
+.navlink {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0.3rem 3rem;
+  padding-block: 0.8rem;
+  background-color: transparent;
+  color: rgb(82, 82, 82);
+  position: relative;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: v.$secondary_font;
+  font-size: 1.1rem;
+  gap: 1rem;
+  width: 100%;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  height: 3rem;
+  &:hover {
     background-color: rgba(v.$primary_color, 0.1);
   }
+}
 
-  &__active_tab {
-    color: v.$primary_color;
-    border-color: transparent;
-    background-color: rgba(v.$primary_color, 0.15);
-  }
-
-  &__active_tab::after {
+.active_tab {
+  color: v.$primary_color;
+  border-color: transparent;
+  background-color: rgba(v.$primary_color, 0.15);
+  &::after {
     $radius: 0.255rem;
     display: block;
     @include usePosition(absolute, $top: 0, $right: 0, $bottom: 0);
@@ -121,28 +127,10 @@
   }
 }
 
-@media screen and (min-width: 780px) {
-  %common-props {
-    position: relative;
-  }
-
+@media (min-width: 780px) {
   .left_side_parent {
-    @extend %common-props;
     display: block;
     width: v.$left-side-width;
-    background-color: transparent;
     z-index: v.$zindex_level_one;
-  }
-
-  .left_side {
-    @extend %common-props;
-    transform: translate(0);
-    z-index: v.$zindex_level_one;
-  }
-
-  .burger_menu {
-    @extend %common-props;
-    width: 0;
-    transform: translateY(-1000%);
   }
 }

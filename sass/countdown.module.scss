@@ -1,0 +1,108 @@
+@use './partials/00-globals/global-mixin' as *;
+@use './partials/00-globals/variables' as v;
+
+$color: darken(v.$affirmative_color, 20%);
+$max-width: 600px;
+
+.countdown_modal {
+  background-color: #555;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0.3rem;
+  margin: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+  max-width: $max-width;
+  z-index: v.$zindex_level_one;
+}
+
+.closeBtn_wrapper {
+  width: 100%;
+  background-color: rgb(21, 36, 43);
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+
+.closeBtn {
+  background-color: rgb(197, 0, 59);
+  border-top-right-radius: 0.3rem;
+  border: none;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.countdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: Merriweather, Ubuntu, Roboto, sans-serif;
+  background-color: rgb(191, 255, 250);
+  border-radius: 0 0 0.3rem 0.3rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.countdown_description {
+  display: block;
+  margin-block-start: 0.7rem;
+  padding-block-start: 0.3rem;
+  color: rgb(43, 48, 56);
+  border-block-start: 1px solid rgb(129, 129, 129);
+}
+.countdown_context {
+  display: flex;
+  flex-direction: column;
+  color: darken($color, 7%);
+  gap: 0.2rem;
+  padding-block: 0.5rem;
+  text-transform: capitalize;
+  font-family: Roboto, Ubuntu, 'Open Sans', serifSG;
+}
+
+.title {
+  font-weight: 200;
+  font-size: 1.3rem;
+  width: 100%;
+  text-align: center;
+  border-block-end: 1px solid $color;
+}
+
+.subTitle {
+  color: darken($color, 15%);
+  font-weight: 200;
+  font-size: 1.2rem;
+  width: 100%;
+  text-align: center;
+}
+
+.clock_content {
+  color: #fff;
+  text-align: center;
+  font-size: 2rem;
+  gap: 1rem;
+  @include useFlexbox;
+  flex-wrap: wrap;
+}
+
+.time_block {
+  padding: 0.4rem;
+  font-weight: 600;
+  border-radius: 3px;
+  background-color: lighten($color, 40%);
+  @include useFlexbox;
+  gap: 0.3rem;
+}
+
+.time {
+  border-radius: 3px;
+  background: lighten($color, 20%);
+  display: inline-flex;
+  padding: 0.3rem;
+}
+
+.smalltext {
+  font-size: 1rem;
+}
