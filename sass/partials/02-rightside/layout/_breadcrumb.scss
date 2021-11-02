@@ -9,7 +9,8 @@
   font-weight: 600;
   font-size: 0.888rem;
   color: #344;
-
+  width: 100%;
+  flex: 1 0 100%;
   &__path {
     display: flex;
     &.active::before {

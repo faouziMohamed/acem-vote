@@ -4,6 +4,8 @@ export function VoteButton({
   onClick = () => {},
   title = 'Cliquez pour voter',
   dataId = '',
+  context = '',
+  disabled = false,
   children,
 }) {
   return (
@@ -12,6 +14,8 @@ export function VoteButton({
       title={title}
       data-id={dataId}
       onClick={onClick}
+      data-context={context}
+      disabled={disabled}
     >
       {children || 'Votez maintenant'}
     </button>

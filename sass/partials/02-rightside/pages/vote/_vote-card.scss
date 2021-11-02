@@ -1,0 +1,134 @@
+@use './candidate-card' as *;
+@use './../../../00-globals/global-mixin' as *;
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.2rem;
+  width: 100%;
+  overflow: hidden;
+  gap: 0.2rem;
+}
+
+.c_wrapper {
+  background-color: rgb(112, 112, 112);
+  max-width: 30rem;
+  padding: 0.05rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: fit-content(9rem) 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.candidateVote {
+  @extend .candidate_card;
+  width: 100%;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  &:hover {
+    box-shadow: none;
+    border: none;
+  }
+}
+
+.figure_candidate {
+  @extend .candidate_card__figure;
+  align-items: center;
+}
+
+.c_picture {
+  @include useSquareSize(4.5rem);
+  background-color: rgb(214, 236, 255);
+  position: relative;
+}
+
+.c_picture_img {
+  @extend .candidate_figure__picture;
+}
+
+.c_description {
+  @extend .candidate_description;
+}
+
+.c_name {
+  font-size: 0.87rem;
+  background-color: rgb(230, 247, 247);
+}
+
+.detail_title,
+.c_post {
+  font-size: 0.88rem;
+}
+.c_post {
+  text-align: center;
+}
+.detail_title {
+  font-weight: 500;
+  font-family: Ubuntu, Roboto, sans-serif;
+}
+
+.c_skills {
+  @extend .candidate_description__skills;
+  max-width: 16rem;
+  font-size: 0.7rem;
+}
+
+.c_form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(230, 247, 247);
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding-inline: 0.5rem 1rem;
+  padding-block: 0.5rem;
+}
+
+.c_vlabel {
+  display: flex;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.c_labels {
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 0.6rem;
+}
+
+:is(.c_vlabel, .c_radio) {
+  cursor: pointer;
+}
+
+@media (min-width: 400px) {
+  .c_wrapper {
+    grid-template-columns: fit-content(9rem) 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .candidateVote {
+    width: 10rem;
+  }
+
+  .c_skills {
+    max-width: 8.5rem;
+    font-size: 0.7rem;
+  }
+
+  .c_form {
+    flex-direction: row;
+  }
+
+  .c_labels {
+    flex-direction: column;
+  }
+}
