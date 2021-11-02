@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import style from '../../sass/app.module.scss';
 import { VoteButton } from './vote-button';
@@ -9,6 +9,7 @@ export function CandidateCardBLock({ candidate: c, setShowModal }) {
   const {
     details: { skills },
   } = c;
+  const [showBtn] = useState(false);
   const modalRef = useRef(null);
   return (
     <div className={style.candidate_card} tabIndex='0' ref={modalRef}>
@@ -53,7 +54,7 @@ export function CandidateCardBLock({ candidate: c, setShowModal }) {
           </small>
         </figcaption>
       </figure>
-      <VoteButton />
+      {showBtn && <VoteButton dataId={c.id} />}
     </div>
   );
 }
@@ -65,6 +66,7 @@ export function CandidateModal({ setShowModal, modal }) {
     details: { skills, description },
     candidatePost,
   } = c;
+
   return (
     <div
       className={`hidden ${style.candidate_modal_container}`}

@@ -55,13 +55,19 @@ export function AppLeftside({ showLeftPane }) {
 function NavTabs({ mutate }) {
   const tabs = [
     {
-      name: 'Vote',
+      name: 'Votes',
       icon: 'fas fa-vote-yea',
       activeTab: Router.asPath === '/vote',
       path: '/vote',
     },
     {
-      name: 'Results',
+      name: 'Candidats',
+      icon: 'fas fa-users',
+      activeTab: Router.asPath === '/candidates',
+      path: '/candidates',
+    },
+    {
+      name: 'Resultats',
       icon: 'fas fa-poll',
       activeTab: Router.asPath === '/results',
       path: '/results',

@@ -12,7 +12,7 @@
 
   &__path {
     display: flex;
-    &:not(.active)::after {
+    &.active::before {
       @include useFlexbox($dir: 0);
       content: '>';
       padding-inline: 0.5rem;

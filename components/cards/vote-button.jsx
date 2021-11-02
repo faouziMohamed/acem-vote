@@ -2,7 +2,7 @@ import style from '../../sass/app.module.scss';
 
 export function VoteButton({
   onClick = () => {},
-  title = '',
+  title = 'Cliquez pour voter',
   dataId = '',
   children,
 }) {

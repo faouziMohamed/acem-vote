@@ -7,15 +7,15 @@ import Countdown from 'react-countdown';
 import AutoTypingText from '../components/effects/auto-typing-text';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
 import FuturaSpinner from '../components/spinners/futura';
-import { useUser } from '../lib/hooks/hooks';
+import { useEvents, useUser } from '../lib/hooks/hooks';
 import style from '../sass/home.module.scss';
 import CountdownView from './countdown';
 
 export default function Home() {
   const [user, { loading }] = useUser();
   const [showCountdown, setShowCountdown] = useState(true);
-
-  if (loading) return <BubbleLoader />;
+  const [event] = useEvents();
+  if (loading || !event) return <BubbleLoader />;
   if (user) {
     Router.push('/vote');
     return <FuturaSpinner />;
@@ -28,11 +28,29 @@ export default function Home() {
     <div className={style.home_parent}>
       <div className={style.page_overlay} />
       {showCountdown && (
-        <Countdown
-          date={new Date('2021-12-31T00:00:00')}
-          onComplete={() => Router.push('/vote')}
-          renderer={Renderer}
-        />
+        <div className='modal-container'>
+          <Countdown
+            date={new Date(event.eventDate)}
+            onComplete={() => Router.push('/vote')}
+            renderer={Renderer}
+          />
+          <style>
+            {`
+            .modal-container {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              z-index: 9999;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          `}
+          </style>
+        </div>
       )}
 
       <div className={`${style.root} root`}>
@@ -107,6 +125,15 @@ function Features() {
     'Gestion des candidats et élections',
     'Chiffrement bout-à-bout (Possibilité de triche très bas)',
   ];
+  const [event] = useEvents();
+
+  const Rendrer = ({ days, hours, minutes, seconds }) => (
+    <div>
+      <small>
+        {days} jours {hours} heures {minutes} minutes {seconds} secondes
+      </small>
+    </div>
+  );
   return (
     <section className={style.main_content__col_2}>
       <div className={style.content_description}>
@@ -125,7 +152,11 @@ function Features() {
           <a
             className={`btn btn-primary ${style.btn_link} ${style.getting_started_btn}`}
           >
-            Commencer maintenant
+            Commencer maintenant{' '}
+            <Countdown
+              date={new Date(event.eventDate)}
+              renderer={(props) => <Rendrer {...props} />}
+            />
           </a>
         </Link>
       </div>

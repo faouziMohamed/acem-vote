@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import { useState } from 'react';
 
 import style from '../../sass/app.module.scss';
+import { VoteButton } from './vote-button';
 
 export function CandidateCardList({ candidate: c }) {
   const { user } = c;
@@ -8,6 +10,7 @@ export function CandidateCardList({ candidate: c }) {
     details: { skills, description },
     candidatePost,
   } = c;
+  const [showBtn] = useState(false);
   return (
     <div className={style.candidate_row}>
       <div className={style.candidate_row__overlay} data-id={c.id} tabIndex='0'>
@@ -30,13 +33,7 @@ export function CandidateCardList({ candidate: c }) {
           <span className={style.names}>
             {user.firstname} {user.lastname}
           </span>
-          <button
-            className={`btn btn-primary ${style.vote_btn}`}
-            title='Cliquez pour voter'
-            data-id={c.id}
-          >
-            Votez maintenant
-          </button>
+          {showBtn && <VoteButton dataId={c.id} />}
         </h3>
 
         <p className={style.detail_row}>

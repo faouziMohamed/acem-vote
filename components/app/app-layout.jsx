@@ -8,7 +8,7 @@ import { AppLeftside } from './app-leftside';
 import { BurgerMenu } from './burger-menu';
 // import { AppNavbar } from './app-navbar';
 
-export function AppLayout({ children }) {
+export function AppLayout({ children, pathname }) {
   const [user, { loading }] = useUser();
   const inputRef = useRef(null);
   const [showLeftPane, setShowLeftPane] = useState(false);
@@ -54,11 +54,12 @@ export function AppLayout({ children }) {
                 <div className={`${style.base} ${style.breadcrumb__path}`}>
                   Home
                 </div>
-                <div className={`${style.breadcrumb__path} ${style.active}`}>
-                  Vote
-                </div>
+                {pathname && (
+                  <div className={`${style.breadcrumb__path} ${style.active}`}>
+                    {pathname}
+                  </div>
+                )}
               </div>
-              <h2 className={style.greeting_msg}>Hi, welcome back</h2>
             </header>
             {children}
           </main>

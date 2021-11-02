@@ -19,11 +19,11 @@ export const useFetch = (url) => {
 };
 
 export const useCandidates = (cid = '') => {
-  const { data, error, mutate } = useSWR(
-    `/api/candidate/${cid || ''}`,
-    fetcher,
-  );
-  return [data, { loading: !data, error, mutate }];
+  return useFetch(`/api/candidates/${cid}`);
+};
+
+export const useEvents = (eid = '') => {
+  return useFetch(`/api/event/${eid}`);
 };
 
 export function useAuthVerification() {

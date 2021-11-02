@@ -33,4 +33,6 @@ yarn-error.log*
 .vercel
 .styles
 .env.production
+testspublic/js/
+public/js
 tests
