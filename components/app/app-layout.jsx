@@ -41,6 +41,11 @@ export function AppLayout({ children, pathname }) {
     return <FuturaSpinner />;
   }
 
+  if (user.isFirstLogin) {
+    Router.push('/new-paire');
+    return <FuturaSpinner />;
+  }
+
   return (
     <>
       <noscript>You need to activate JavaScript to run this app</noscript>

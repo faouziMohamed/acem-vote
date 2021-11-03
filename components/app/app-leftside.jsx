@@ -12,6 +12,10 @@ export function AppLeftside({ showLeftPane }) {
   const [user, { loading, mutate }] = useUser();
   const paneRef = useLeftPane(showLeftPane);
   if (loading) return <FuturaSpinner />;
+  if (!loading && !user) {
+    Router.push('/login');
+    return <FuturaSpinner />;
+  }
 
   return (
     <div className={style.left_side_parent} ref={paneRef}>

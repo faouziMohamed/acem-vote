@@ -28,6 +28,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
+    "eslint-plugin-react-hooks": "^4.2.1-alpha-9fb344225-20211102",
     "helmet": "^4.6.0",
     "mongoose": "^6.0.10",
     "ms": "^2.1.3",

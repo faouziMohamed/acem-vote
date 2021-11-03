@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Countdown from 'react-countdown';
 
 import { AppLayout } from '../components/app/app-layout';
@@ -65,7 +65,7 @@ function CandidateVote({ candidate: c }) {
 
 function RadioForm({ candidate: c }) {
   const [selected, setSelected] = useState(false);
-
+  const formRef = useRef(null);
   const { user } = c;
   if (!user.hasVoted) user.hasVoted = [];
 
@@ -84,10 +84,19 @@ function RadioForm({ candidate: c }) {
       context: c.candidatePost,
       voter: user.id,
     };
+
+    console.log(formRef.current.vote.value, selected, msg);
+    // fetch('/api/vote', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(msg),
+    // });
   };
 
   return (
-    <form className={style.c_form} onSubmit={onSubmit}>
+    <form className={style.c_form} onSubmit={onSubmit} ref={formRef}>
       <div className={style.c_labels}>
         {radios.map((radio) => (
           <label key={radio.value} className={style.c_vlabel}>
