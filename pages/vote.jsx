@@ -5,23 +5,36 @@ import Countdown from 'react-countdown';
 import { AppLayout } from '../components/app/app-layout';
 import { VoteButton } from '../components/cards/vote-button';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
-import { useCandidates, useEvents } from '../lib/hooks/hooks';
+import AppError from '../lib/errors/app-error';
+import {
+  fetcherGET,
+  postJSON,
+  useCandidates,
+  useEvents,
+  useUser,
+} from '../lib/hooks/hooks';
+import { decryptMessage, generateAESKey } from '../lib/security/aes.utils';
+import GPGEncryptor from '../lib/security/gpgEncryptor';
 import style from '../sass/app.module.scss';
 import CountdownView from './countdown';
 
 export default function Vote() {
   const [, { loading: eventLoading }] = useEvents();
+  const [currUser, { loading }] = useUser();
   const [candidate, { loading: candidateLoading }] = useCandidates();
-  if (eventLoading || candidateLoading) {
+  if (loading || eventLoading || candidateLoading) {
     return <BubbleLoader />;
   }
   const { candidates = [] } = candidate;
   return (
     <AppLayout pathname={'Votes'}>
       <div className={style.mainWrapper}>
-        {candidates?.map((c) => (
-          <CandidateVote candidate={c} key={c.id} />
-        ))}
+        {candidates?.map(
+          (c) =>
+            !currUser.hasVoted.includes(c.candidatePost) && (
+              <CandidateVote candidate={c} key={c.id} />
+            ),
+        )}
       </div>
       {/* <CountDownEvent /> */}
     </AppLayout>
@@ -32,8 +45,9 @@ function CandidateVote({ candidate: c }) {
   const {
     details: { skills },
   } = c;
-
-  const formProps = { candidate: c };
+  const [showCandidate, setShowCandidate] = useState(true);
+  const formProps = { candidate: c, setShowCandidate };
+  if (!showCandidate) return null;
   return (
     <div className={style.c_wrapper}>
       <div className={style.candidateVote}>
@@ -63,11 +77,12 @@ function CandidateVote({ candidate: c }) {
   );
 }
 
-function RadioForm({ candidate: c }) {
+function RadioForm({ candidate: c, setShowCandidate }) {
+  const [currUser] = useUser();
+
   const [selected, setSelected] = useState(false);
   const formRef = useRef(null);
   const { user } = c;
-  if (!user.hasVoted) user.hasVoted = [];
 
   const radios = [
     { label: 'Oui', value: 'yes' },
@@ -75,24 +90,54 @@ function RadioForm({ candidate: c }) {
     { label: 'Nul', value: 'abstain' },
   ];
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!selected) return;
+
+    const { pubKey: serverPubKey } = await fetcherGET('/api/key/server/public');
+    const aesKey = generateAESKey(100);
+    const aesKeyEncrypted = await GPGEncryptor.encryptMessageStatic({
+      message: aesKey,
+      armoredEncryptionKey: serverPubKey,
+    });
+
+    const { keysEncrypted } = await postJSON({
+      url: `/api/keys/user/`,
+      data: { aesKeyEncrypted },
+    });
+
+    const decrypted = decryptMessage(keysEncrypted, aesKey);
+    const { publicKey, privateKey, passphrase } = JSON.parse(decrypted);
+    const encryptor = await GPGEncryptor.fromArmoredKeys({
+      publicArmoredKey: publicKey,
+      privateArmoredKey: privateKey,
+      passphrase,
+    });
+
+    const { id: voteID } = await getNewVoteID({ encryptor });
     const msg = {
-      candidate: c.id,
+      candidateId: c.id,
       vote: selected,
       context: c.candidatePost,
-      voter: user.id,
+      voterId: currUser.id,
+      cOrgId: c.orgId,
+      voteID,
     };
 
-    console.log(formRef.current.vote.value, selected, msg);
-    // fetch('/api/vote', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(msg),
-    // });
+    const voteEncrypted = await createEncryptedMsg({
+      encryptor,
+      message: msg,
+      armoredPubkey: serverPubKey,
+    });
+
+    const { error } = await postJSON({
+      url: '/api/vote/submit',
+      data: { voteEncrypted },
+    });
+
+    if (!error) {
+      setShowCandidate(false);
+    }
   };
 
   return (
@@ -113,7 +158,7 @@ function RadioForm({ candidate: c }) {
           </label>
         ))}
       </div>
-      {!user.hasVoted.includes(c.candidatePost) && (
+      {!currUser.hasVoted.includes(c.candidatePost) && (
         <div>
           <VoteButton
             dataId={c.id}
@@ -155,4 +200,29 @@ export function CountDownEvent() {
       </style>
     </div>
   );
+}
+
+async function getNewVoteID({ encryptor }) {
+  const userPubKey = encryptor.getPublicArmoredKey();
+
+  const { voteIdEncrypted, error } = await postJSON({
+    url: `/api/vote/id`,
+    data: { armoredPublicKey: userPubKey },
+  });
+  if (error) {
+    throw new AppError({ message: 'Erreur sur la récupération du vote Id' });
+  }
+  const { data } = await encryptor.decryptMessage(voteIdEncrypted);
+  return JSON.parse(data);
+}
+
+async function createEncryptedMsg({
+  message,
+  encryptor,
+  armoredPubkey = '',
+  stringify = true,
+}) {
+  const msgStringified = stringify ? JSON.stringify(message) : message;
+  const publicKey = await GPGEncryptor.readArmoredPublicKey(armoredPubkey);
+  return encryptor.encryptMessage(msgStringified, publicKey);
 }

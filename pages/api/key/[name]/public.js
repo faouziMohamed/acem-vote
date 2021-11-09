@@ -8,18 +8,14 @@ import {
   getUserKeys,
 } from '../../../../lib/utils/keys.utils';
 import auth from '../../../../middleware/authentication';
+import { checkAuth } from '../../../../middleware/init-middleware';
 
-const handler = nextConnect().use(auth);
+const handler = nextConnect()
+  .use(auth)
+  .use(checkAuth('Vous devez être connecté pour récupérer vos clés.'));
 
 handler.get(async (req, res) => {
   try {
-    if (!req.user) {
-      throw new AppError({
-        message: 'You must be logged in order to retrieve keys.',
-        code: 401,
-        hint: 'Try logging in before submitting request.',
-      });
-    }
     const { name: idName } = req.query;
     let caller;
     if (idName === 'server') {

@@ -10,7 +10,9 @@ handler.use(auth).get((req, res) => {
     const { _id: id, ...userData } = req.user;
     return res.json({ user: { id, ...userData } });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    // eslint-disable-next-line no-console
+    console.log(error.message);
+    return res.status(500).json({ error: 'Un problème viens de survenir' });
   }
 });
 

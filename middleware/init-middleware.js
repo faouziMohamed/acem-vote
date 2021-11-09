@@ -35,3 +35,10 @@ export const headers = () => (req, res, next) => {
 };
 
 export const connectDatabase = () => connectDB((req, res, next) => next());
+
+export const checkAuth =
+  (message = 'Vous devez vous connecter pour accéder à cette ressource') =>
+  (req, res, next) => {
+    if (!req.user) return res.status(401).json({ error: message });
+    return next();
+  };

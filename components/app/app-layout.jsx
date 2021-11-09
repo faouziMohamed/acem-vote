@@ -15,11 +15,6 @@ export function AppLayout({ children, pathname }) {
   const mediaQueryStr = '(min-width: 700px)';
 
   const toggleChecked = () => setShowLeftPane(inputRef.current.checked);
-  useEffect(() => {
-    if (user && user.role === 'admin') {
-      Router.push('/admin');
-    }
-  }, [user]);
 
   useEffect(() => {
     if (inputRef.current) {

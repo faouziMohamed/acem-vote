@@ -101,7 +101,6 @@ async function runConfigure({
 
   setSpinnerMsg('Etablissement des communications avec le serveur...');
   const { pubKey } = await fetcherGET('/api/key/server/public');
-  console.log(pubKey);
   if (!pubKey) {
     setSpinnerMsg('La communication avec le serveur à échouée');
     setShowActionBtn(true);
