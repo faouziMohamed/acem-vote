@@ -4,10 +4,8 @@ import { createKeys } from '../../../lib/db/queries/keys.queries';
 import { updateUserByOrgId } from '../../../lib/db/queries/user.queries';
 import AppError from '../../../lib/errors/app-error';
 import { handleErrors } from '../../../lib/errors/http/handlers';
-import {
-  decryptReqBodyMsg,
-  ensureKeysArePassedOrThrow,
-} from '../../../lib/utils/keys.utils';
+import { generateRandomString } from '../../../lib/security/aes.utils';
+import { generateGPGNewKeys } from '../../../lib/utils/keys.utils';
 import auth from '../../../middleware/authentication';
 import { checkAuth } from '../../../middleware/init-middleware';
 
@@ -15,20 +13,21 @@ const handler = nextConnect()
   .use(auth)
   .use(
     checkAuth(
-      'Vous devez être connecté pour pouvoir enregistrer de nouveau clés.',
+      'Vous devez être connecté pour pouvoir enregistrer de nouveaux clés.',
     ),
   );
 
 handler.post(async (req, res) => {
   try {
     const { user } = req;
-    const armoredKeysWithPassphrase = await decryptReqBodyMsg({ ...req.body });
-    ensureKeysArePassedOrThrow(armoredKeysWithPassphrase);
     const name = `${user.firstname} ${user.lastname}`;
     const { orgId: oid } = user;
     const email = `${user.firstname}.${user.lastname}-${oid}@acem.evote.com`;
+    const passphrase = generateRandomString(100);
 
     try {
+      const encryptor = await generateGPGNewKeys({ name, email, passphrase });
+      const armoredKeysWithPassphrase = encryptor.getArmoredKeys();
       await createKeys({ name, email, ...armoredKeysWithPassphrase });
     } catch (error) {
       const message = 'Impossible de sauvegarder les clés';

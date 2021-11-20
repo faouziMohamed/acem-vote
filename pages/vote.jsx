@@ -144,18 +144,27 @@ function RadioForm({ candidate: c, setShowCandidate }) {
     <form className={style.c_form} onSubmit={onSubmit} ref={formRef}>
       <div className={style.c_labels}>
         {radios.map((radio) => (
-          <label key={radio.value} className={style.c_vlabel}>
-            <input
-              type='radio'
-              name='vote'
-              value={radio.value}
-              checked={selected === radio.value}
-              onChange={(e) => setSelected(e.target.value)}
-              className={style.c_radio}
-              data-uid={user.id}
-            />
-            {radio.label}
-          </label>
+          <div
+            key={radio.value}
+            className={`${style.c_vlabel} ${style.checkbox_switcher}`}
+          >
+            <label className={style.label_switch}>
+              <div className={`${style.input_container} ${style.switch}`}>
+                <input
+                  tabIndex='0'
+                  type='radio'
+                  name='vote'
+                  value={radio.value}
+                  checked={selected === radio.value}
+                  onChange={(e) => setSelected(e.target.value)}
+                  className={`${style.c_radio} ${style.hidden} ${style.checkbox_slider}`}
+                  data-uid={user.id}
+                />
+                <span className={style.slider} />
+              </div>
+              <span className={style.label_switch_txt}> {radio.label} </span>
+            </label>
+          </div>
         ))}
       </div>
       {!currUser.hasVoted.includes(c.candidatePost) && (

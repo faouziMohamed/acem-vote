@@ -43,5 +43,10 @@ export async function postJSON({ url, data, stringify = true }) {
     body: stringify ? JSON.stringify(data) : data,
   });
   if (res.ok) return res.json();
-  return { error: "Une erreur est survenu pendant l'envoie des données" };
+  const { hint, error: cause } = await res.json();
+  return {
+    error: "Une erreur est survenu pendant l'envoie des données",
+    hint,
+    cause,
+  };
 }
