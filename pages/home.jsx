@@ -5,11 +5,11 @@ import { useState } from 'react';
 import Countdown from 'react-countdown';
 
 import AutoTypingText from '../components/effects/auto-typing-text';
+import CountdownView from '../components/misc/countdown';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
 import FuturaSpinner from '../components/spinners/futura';
 import { useEvents, useUser } from '../lib/hooks/hooks';
 import style from '../sass/home.module.scss';
-import CountdownView from './countdown';
 
 export default function Home() {
   const [user, { loading }] = useUser();

@@ -4,6 +4,7 @@ import Countdown from 'react-countdown';
 
 import { AppLayout } from '../components/app/app-layout';
 import { VoteButton } from '../components/cards/vote-button';
+import CountdownView from '../components/misc/countdown';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
 import AppError from '../lib/errors/app-error';
 import {
@@ -16,7 +17,6 @@ import {
 import { decryptMessage, generateAESKey } from '../lib/security/aes.utils';
 import GPGEncryptor from '../lib/security/gpgEncryptor';
 import style from '../sass/app.module.scss';
-import CountdownView from './countdown';
 
 export default function Vote() {
   const [, { loading: eventLoading }] = useEvents();

@@ -1,5 +1,5 @@
-import { appendZero } from '../lib/utils/lib.utils';
-import style from '../sass/countdown.module.scss';
+import { appendZero } from '../../lib/utils/lib.utils';
+import style from '../../sass/countdown.module.scss';
 
 export default function CountdownView({
   days = 24,
@@ -9,6 +9,13 @@ export default function CountdownView({
   setShowCountdown = () => {},
   hasCloseButton = true,
 }) {
+  const data = [
+    { label: 'Jours', value: days, className: style.days },
+    { label: 'Heures', value: hours, className: style.hours },
+    { label: 'Minutes', value: minutes, className: style.minutes },
+    { label: 'Secondes', value: seconds, className: style.seconds },
+  ];
+
   return (
     <div className={style.countdown_modal}>
       {hasCloseButton && <CloseButton setShowCountdown={setShowCountdown} />}
@@ -19,31 +26,16 @@ export default function CountdownView({
           </h1>
           <p className={style.subTitle}>Votes du Bureau executif 2021/2022</p>
         </section>
+
         <div className={style.clock_content}>
-          <div className={style.time_block}>
-            <span className={`${style.time} ${style.days}`}>
-              {appendZero(Number(days))}
-            </span>
-            <small className={style.smalltext}>Jours</small>
-          </div>
-          <div className={style.time_block}>
-            <span className={`${style.time} ${style.hours}`}>
-              {appendZero(Number(hours))}
-            </span>
-            <small className={style.smalltext}>Heures</small>
-          </div>
-          <div className={style.time_block}>
-            <span className={`${style.time} ${style.minutes}`}>
-              {appendZero(Number(minutes))}
-            </span>
-            <small className={style.smalltext}>Minutes</small>
-          </div>
-          <div className={style.time_block}>
-            <span className={`${style.time} ${style.seconds}`}>
-              {appendZero(Number(seconds))}
-            </span>
-            <small className={style.smalltext}>Secondes</small>
-          </div>
+          {data.map(({ label, value, className }) => (
+            <div key={label} className={style.time_block}>
+              <span className={`${style.time} ${className}`}>
+                {appendZero(Number(value))}
+              </span>
+              <small className={style.smalltext}>{label}</small>
+            </div>
+          ))}
         </div>
         <small className={style.countdown_description}>
           Temps restant avant le début des votes
@@ -52,6 +44,7 @@ export default function CountdownView({
     </div>
   );
 }
+
 function CloseButton({ setShowCountdown }) {
   return (
     <div div className={style.closeBtn_wrapper}>
