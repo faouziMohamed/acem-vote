@@ -48,11 +48,11 @@ function Processing({ user }) {
   useEffect(() => {
     let didCancel = false;
     const setSpinnerMsg = (msg) => {
-      spinnerTxtRef.current.innerText = msg;
+      if (spinnerTxtRef.current) spinnerTxtRef.current.innerText = msg;
     };
 
     const setButtonMsg = (msg) => {
-      actionBtnRef.current.innerText = msg;
+      if (actionBtnRef.current) actionBtnRef.current.innerText = msg;
     };
 
     const showSuccessMessage = () => {

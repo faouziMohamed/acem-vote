@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Countdown from 'react-countdown';
 
 import { AppLayout } from '../components/app/app-layout';
@@ -7,34 +7,49 @@ import { VoteButton } from '../components/cards/vote-button';
 import CountdownView from '../components/misc/countdown';
 import { BubbleLoader } from '../components/spinners/bubble-loader';
 import AppError from '../lib/errors/app-error';
-import {
-  fetcherGET,
-  postJSON,
-  useCandidates,
-  useEvents,
-  useUser,
-} from '../lib/hooks/hooks';
+import { fetcherGET, postJSON, useEvents, useUser } from '../lib/hooks/hooks';
 import { decryptMessage, generateAESKey } from '../lib/security/aes.utils';
 import GPGEncryptor from '../lib/security/gpgEncryptor';
 import style from '../sass/app.module.scss';
 
+const hasVoted = [];
+const voteContext = createContext([]);
+
 export default function Vote() {
-  const [, { loading: eventLoading }] = useEvents();
-  const [currUser, { loading }] = useUser();
-  const [candidate, { loading: candidateLoading }] = useCandidates();
-  if (loading || eventLoading || candidateLoading) {
+  const [event, { loading: eventLoading }] = useEvents();
+  const [user, { loading }] = useUser();
+  const [candidates, setCandidates] = useState([]);
+  const [voted, setVoted] = useState(hasVoted);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const getCandidates = async () => {
+      const { candidates: c = [] } = await fetcherGET('/api/candidates');
+      setCandidates(c);
+      // setVoted(cd.map((c) => c.candidatePost));
+    };
+    setIsLoading(true);
+    getCandidates();
+    setIsLoading(false);
+    setVoted(user?.hasVoted || []);
+    return () => setIsLoading(false);
+  }, [isLoading, user?.hasVoted]);
+  if (loading || eventLoading || isLoading) {
     return <BubbleLoader />;
   }
-  const { candidates = [] } = candidate;
+
+  // console.log('Parent voted', user.hasVoted);
+  console.log(event);
   return (
     <AppLayout pathname={'Votes'}>
       <div className={style.mainWrapper}>
-        {candidates?.map(
-          (c) =>
-            !currUser.hasVoted.includes(c.candidatePost) && (
-              <CandidateVote candidate={c} key={c.id} />
-            ),
-        )}
+        <voteContext.Provider value={[voted, setVoted]}>
+          {candidates?.map(
+            (c) =>
+              !voted.includes(c?.candidatePost) && (
+                <CandidateVote candidate={c} key={c.id} />
+              ),
+          )}
+        </voteContext.Provider>
       </div>
       {/* <CountDownEvent /> */}
     </AppLayout>
@@ -45,9 +60,6 @@ function CandidateVote({ candidate: c }) {
   const {
     details: { skills },
   } = c;
-  const [showCandidate, setShowCandidate] = useState(true);
-  const formProps = { candidate: c, setShowCandidate };
-  if (!showCandidate) return null;
   return (
     <div className={style.c_wrapper}>
       <div className={style.candidateVote}>
@@ -72,15 +84,17 @@ function CandidateVote({ candidate: c }) {
           </figcaption>
         </figure>
       </div>
-      <RadioForm {...formProps} />
+      <RadioForm candidate={c} />
     </div>
   );
 }
 
-function RadioForm({ candidate: c, setShowCandidate }) {
+function RadioForm({ candidate: c }) {
   const [currUser] = useUser();
 
   const [selected, setSelected] = useState(false);
+  const [voted, setVoted] = useContext(voteContext);
+
   const formRef = useRef(null);
   const { user } = c;
 
@@ -136,7 +150,7 @@ function RadioForm({ candidate: c, setShowCandidate }) {
     });
 
     if (!error) {
-      setShowCandidate(false);
+      setVoted([...voted, c.candidatePost]);
     }
   };
 
@@ -144,26 +158,25 @@ function RadioForm({ candidate: c, setShowCandidate }) {
     <form className={style.c_form} onSubmit={onSubmit} ref={formRef}>
       <div className={style.c_labels}>
         {radios.map((radio) => (
-          <div
-            key={radio.value}
-            className={`${style.c_vlabel} ${style.checkbox_switcher}`}
-          >
-            <label className={style.label_switch}>
-              <div className={`${style.input_container} ${style.switch}`}>
-                <input
-                  tabIndex='0'
-                  type='radio'
-                  name='vote'
-                  value={radio.value}
-                  checked={selected === radio.value}
-                  onChange={(e) => setSelected(e.target.value)}
-                  className={`${style.c_radio} ${style.hidden} ${style.checkbox_slider}`}
-                  data-uid={user.id}
-                />
-                <span className={style.slider} />
-              </div>
-              <span className={style.label_switch_txt}> {radio.label} </span>
-            </label>
+          <div key={radio.value} className={`${style.c_vlabel}`}>
+            <div className={style.checkbox_check}>
+              <label className={style.label_checker} tabIndex={0}>
+                <div>
+                  <input
+                    tabIndex='-1'
+                    type='radio'
+                    name='vote'
+                    value={radio.value}
+                    checked={selected === radio.value}
+                    onChange={(e) => setSelected(e.target.value)}
+                    className={`${style.c_radio} ${style.hidden} ${style.checkbox_checker}`}
+                    data-uid={user.id}
+                  />
+                  <span className={style.checker} />
+                </div>
+                <span className={style.label_txt}>{radio.label}</span>
+              </label>
+            </div>
           </div>
         ))}
       </div>
@@ -182,12 +195,22 @@ function RadioForm({ candidate: c, setShowCandidate }) {
 }
 
 export function CountDownEvent() {
-  const Renderer = (props) => (
-    <CountdownView {...props} hasCloseButton={false} />
+  const Renderer = ({ days, hours, minutes, seconds }) => (
+    <CountdownView
+      days={days}
+      hours={hours}
+      minutes={minutes}
+      seconds={seconds}
+      hasCloseButton={false}
+    />
   );
   const [event] = useEvents();
   const { eventDate: start } = event;
-
+  useEffect(() => {
+    const contentRoot = document.querySelector(`.${style.main_content_root}`);
+    contentRoot?.classList.add(style.prevent_scroll);
+    return () => contentRoot?.classList.remove(style.prevent_scroll);
+  }, []);
   return (
     <div className='modal-container'>
       <Countdown date={start} renderer={Renderer} />

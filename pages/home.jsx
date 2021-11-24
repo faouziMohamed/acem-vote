@@ -21,8 +21,15 @@ export default function Home() {
     return <FuturaSpinner />;
   }
 
-  const Renderer = (props) => (
-    <CountdownView {...props} setShowCountdown={setShowCountdown} />
+  const Renderer = ({ days, hours, minutes, seconds }) => (
+    <CountdownView
+      days={days}
+      hours={hours}
+      minutes={minutes}
+      seconds={seconds}
+      hasCloseButton={true}
+      setShowCountdown={setShowCountdown}
+    />
   );
   return (
     <div className={style.home_parent}>

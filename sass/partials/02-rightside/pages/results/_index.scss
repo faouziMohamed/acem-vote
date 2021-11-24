@@ -1,8 +1,8 @@
 @use '../../../00-globals/variables' as v;
-@use '../../../00-globals/global-mixin' as *;
+@use '../../../00-globals/global-mixin' as gmix;
 
 .chart_btn_tab_wrapper {
-  @include useFlexbox(column, $jt: none);
+  @include gmix.flexbox(column, $jt: none);
   width: 50%;
   background-color: rgb(246, 251, 255);
   border-radius: 5px;
@@ -11,7 +11,7 @@
 }
 
 .btn_tab_container {
-  @include useFlexbox(row);
+  @include gmix.flexbox(row);
   gap: 1px;
   flex: 1;
   width: 70%;

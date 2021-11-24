@@ -1,9 +1,9 @@
 @use '../00-globals/variables' as v;
-@use '../00-globals/global-mixin' as *;
+@use '../00-globals/global-mixin' as gmix;
 
 .left_side_parent {
   display: block;
-  @include useSquareSize(100%);
+  @include gmix.size(100%);
   transition: all 250ms ease;
   max-width: v.$left-side-width;
   flex: 0;
@@ -34,14 +34,14 @@
 }
 
 .user_picture {
-  @include useSquareSize(2.5rem);
+  @include gmix.size(2.5rem);
   position: relative;
 }
 
 .user_picture__img {
   background-color: rgba(0, 38, 165, 0.2);
   border-radius: 50%;
-  @include useSquareSize(100%);
+  @include gmix.size(100%);
   object-fit: scale-down;
 }
 
@@ -118,7 +118,7 @@
   &::after {
     $radius: 0.255rem;
     display: block;
-    @include usePosition(absolute, $top: 0, $right: 0, $bottom: 0);
+    @include gmix.position(absolute, $top: 0, $right: 0, $bottom: 0);
     content: '';
     background-color: v.$primary_color;
     width: 0.23rem;

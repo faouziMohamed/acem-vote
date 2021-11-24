@@ -1,21 +1,21 @@
 @use '../../00-globals/variables' as v;
-@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/global-mixin' as gmix;
 
 .main_page__navbar {
-  @include useFlexbox(none, space-between);
+  @include gmix.flexbox(none, space-between);
   background-color: rgba(v.$primary_color, 1%);
   padding-inline: 0.5rem;
   padding: 0.5rem;
 }
 
 .top_navbar {
-  @include useFlexbox($jt: flex-end, $al: center);
+  @include gmix.flexbox($jt: flex-end, $al: center);
   list-style: none;
   gap: 0.5rem;
 
   &__btn {
-    @include useSquareSize(2.2rem);
-    @include useFlexbox($jt: center, $al: center);
+    @include gmix.size(2.2rem);
+    @include gmix.flexbox($jt: center, $al: center);
     position: relative;
     color: #292929e3;
     border-radius: 50%;
@@ -33,7 +33,7 @@
 }
 
 .profil_btn {
-  @include useSquareSize(4.2rem);
+  @include gmix.size(4.2rem);
   position: relative;
   padding: 0;
   background-color: rgba(v.$primary_color, 0.1);

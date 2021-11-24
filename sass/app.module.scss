@@ -1,4 +1,7 @@
-@forward './partials/01-leftside/index';
-@forward './partials/02-rightside/index';
+@forward './partials/01-leftside/';
+@forward './partials/02-rightside/';
 @forward './objects/burger/burger-classic';
+@forward './objects/checkbox/checkbox-classic';
+@forward './objects/checkbox/slider';
+@forward './objects/radio/radio';
 @forward './partials/00-globals/generic-modifier';

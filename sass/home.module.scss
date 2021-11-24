@@ -1,4 +1,4 @@
-@use './partials/00-globals/global-mixin' as *;
+@use './partials/00-globals/global-mixin' as gmix;
 @use './partials/00-globals/variables' as v;
 
 .home_parent {
@@ -10,16 +10,16 @@
 
 .page_overlay {
   opacity: 0.4;
-  @include useSquareSize(100%);
-  @include usePosition(absolute, 0, 0);
+  @include gmix.size(100%);
+  @include gmix.position(absolute, 0, 0);
   background-color: darken(v.$primary_color, 90%);
 }
 
 .root,
 .home_parent {
-  @include useFlexbox(column, none, none);
-  @include usePosition(absolute, 0, 0);
-  @include useSquareSize(100%);
+  @include gmix.flexbox(column, none, none);
+  @include gmix.position(absolute, 0, 0);
+  @include gmix.size(100%);
   background-color: transparent;
   overflow: auto;
   @media (min-width: 950px) {
@@ -32,11 +32,11 @@
 }
 
 .navbar {
-  @include useFlexbox(row, space-between, center);
+  @include gmix.flexbox(row, space-between, center);
   padding-inline: 0.7rem;
 
   &__logo {
-    @include useFlexbox;
+    @include gmix.flexbox;
     width: 5rem;
     height: 4rem;
     flex-shrink: 0;
@@ -51,10 +51,10 @@
 
   &__links {
     flex: 1 0 20%;
-    @include useFlexbox(row, flex-end, center, 1);
+    @include gmix.flexbox(row, flex-end, center, 1);
     gap: 0.5125rem;
     &__item {
-      @include useFlexbox(row, center, center);
+      @include gmix.flexbox(row, center, center);
       flex: 0 1 5rem;
     }
   }
@@ -79,12 +79,12 @@
 }
 
 .main_content {
-  @include useFlexbox(column, flex-start, flex-start);
+  @include gmix.flexbox(column, flex-start, flex-start);
   gap: 5px;
   height: 100%;
 
   &__col_1 {
-    @include useFlexbox(column);
+    @include gmix.flexbox(column);
     flex: 1 0 20%;
     width: 100%;
     color: #fff;
@@ -102,7 +102,7 @@
   &__col_2 {
     flex: 1 0 auto;
     width: 100%;
-    @include useFlexbox(column, flex-start);
+    @include gmix.flexbox(column, flex-start);
   }
 }
 
@@ -129,7 +129,7 @@
 }
 
 .description_list {
-  @include useFlexbox(column, flex-start, flex-start);
+  @include gmix.flexbox(column, flex-start, flex-start);
   list-style-type: none;
   gap: 0.7rem;
 
@@ -186,7 +186,7 @@
 
 @media (min-width: 650px) {
   .main_content {
-    @include useFlexbox(row, center, center);
+    @include gmix.flexbox(row, center, center);
     width: 100%;
     padding: 1rem;
     &__col_1 {
@@ -214,7 +214,7 @@
 
 @media (min-width: 930px) {
   .main_content {
-    @include useFlexbox(row, center, center);
+    @include gmix.flexbox(row, center, center);
     width: 100%;
     padding: 1rem;
     &__col_1 {

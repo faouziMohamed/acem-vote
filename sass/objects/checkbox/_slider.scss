@@ -1,12 +1,17 @@
-@use '../partials/00-globals/global-mixin' as gmix;
-@use '../partials/00-globals/variables' as v;
+@use '../../partials/00-globals/global-mixin' as gmix;
+@use '../../partials/00-globals/variables' as v;
 
-%useCheckboxContainer {
+.input_checkbox_container {
+  display: flex;
+  gap: 5px;
+}
+
+.checkbox_switcher {
   position: relative;
   @include gmix.flexbox(none, none, center, 1);
 }
 
-%label-element {
+.label_switch {
   @include gmix.flexbox(row, flex-start, center);
   gap: 3px;
   padding: 0.3rem 0.5rem;
@@ -17,13 +22,23 @@
   cursor: pointer;
   font-weight: 900;
   font-size: 0.87rem;
+
+  &__txt {
+    color: #333;
+  }
 }
 
-%slider-element-disabled {
+.switch {
+  @include gmix.flexbox(none);
+  width: 2.5rem;
+}
+
+.slider {
   @include gmix.flexbox(none, none, center);
   flex-basis: 100%;
   border-radius: 1rem;
-  @include gmix.size(1.3rem);
+  height: 1.3rem;
+  cursor: pointer;
   background-color: lighten(v.$secondary_color, 100%);
   box-shadow: 0 0 0.325rem 2px inset rgb(211, 209, 209);
   border: 1px solid rgba(#333, 25%);
@@ -36,8 +51,21 @@
     @include gmix.size(1rem);
     position: relative;
     border-radius: 50%;
+    transform: translateX(-0rem);
     transition: all 0.1s ease-in-out;
     box-shadow: 0 0 0.125rem 1px rgb(116, 107, 107);
-    background-color: rgb(170, 166, 166);
+    background-color: rgb(170, 166, 166) /* darken(v.$primary_color, 25%) */;
   }
+}
+
+.checkbox_slider:checked + .slider {
+  background-color: lighten(v.$secondary_color, 40%);
+}
+
+.checkbox_slider:checked + .slider::before {
+  content: '';
+  @include gmix.flexbox(none, none, center);
+  transform: translateX(1.3rem);
+  background-color: lighten(v.$secondary_color, 10%);
+  box-shadow: 0 0 0.1rem 1px lighten(adjust-hue(v.$secondary_color, 10deg), 3%);
 }
