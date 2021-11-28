@@ -29,15 +29,17 @@ export default function Home() {
       seconds={seconds}
       hasCloseButton={true}
       setShowCountdown={setShowCountdown}
+      subTitle={event.eventName}
     />
   );
+
   return (
     <div className={style.home_parent}>
       <div className={style.page_overlay} />
       {showCountdown && (
         <div className='modal-container'>
           <Countdown
-            date={new Date(event.eventDate)}
+            date={new Date(event.startDate)}
             onComplete={() => Router.push('/vote')}
             renderer={Renderer}
           />
@@ -161,7 +163,7 @@ function Features() {
           >
             Commencer maintenant{' '}
             <Countdown
-              date={new Date(event.eventDate)}
+              date={new Date(event.startDate)}
               renderer={(props) => <Rendrer {...props} />}
             />
           </a>

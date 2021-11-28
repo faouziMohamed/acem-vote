@@ -8,6 +8,7 @@ export default function CountdownView({
   seconds = 0,
   setShowCountdown = () => {},
   hasCloseButton = true,
+  subTitle = '',
 }) {
   const data = [
     { label: 'Jours', value: days, className: style.days },
@@ -24,7 +25,7 @@ export default function CountdownView({
           <h1 className={style.title}>
             Association des Comoriens Etudiant aux Maroc – ACEM
           </h1>
-          <p className={style.subTitle}>Votes du Bureau executif 2021/2022</p>
+          <p className={style.subTitle}>{subTitle}</p>
         </section>
 
         <div className={style.clock_content}>
@@ -47,7 +48,7 @@ export default function CountdownView({
 
 function CloseButton({ setShowCountdown }) {
   return (
-    <div div className={style.closeBtn_wrapper}>
+    <div className={style.closeBtn_wrapper}>
       <button
         className={style.closeBtn}
         onClick={() => setShowCountdown(false)}

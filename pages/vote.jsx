@@ -205,7 +205,7 @@ export function CountDownEvent() {
     />
   );
   const [event] = useEvents();
-  const { eventDate: start } = event;
+  const { startDate: start } = event;
   useEffect(() => {
     const contentRoot = document.querySelector(`.${style.main_content_root}`);
     contentRoot?.classList.add(style.prevent_scroll);
