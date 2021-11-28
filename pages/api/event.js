@@ -9,7 +9,7 @@ const handler = nextConnect();
 
 handler.use(auth).get(async (req, res) => {
   try {
-    const [event] = await getLastEvent();
+    const event = await getLastEvent();
     return res.json(event);
   } catch (error) {
     return handleErrors(error, res, AuthError);

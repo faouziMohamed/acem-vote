@@ -1,8 +1,8 @@
 import nextConnect from 'next-connect';
 
 import {
-  existsCandidateById,
-  updateCandidateById,
+  existsCandidate,
+  updateCandidate,
 } from '../../../lib/db/queries/candidate.queries';
 import { updateUserByOrgId } from '../../../lib/db/queries/user.queries';
 import { findVoteIDById } from '../../../lib/db/queries/vote-id.queries';
@@ -40,7 +40,7 @@ handler
         throw new AppError({ message, code: 400, hint });
       }
 
-      if (!(await existsCandidateById(cid))) {
+      if (!(await existsCandidate(cid))) {
         const message =
           'Candidat non trouvé, êtes-vous sûr que vous avez suivi le' +
           ' processus de vote correctement ?';
@@ -84,7 +84,7 @@ handler
       const inc = {};
       const field = `votes.${vote}`;
       inc[field] = 1;
-      await updateCandidateById(cid, { $inc: inc });
+      await updateCandidate(cid, { $inc: inc });
 
       // update user schema to add the context and set hasCompletedVote to true if all context are voted
       req.user = await updateUserByOrgId(user.orgId, {

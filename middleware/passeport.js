@@ -3,7 +3,7 @@ import LocalStrategy from 'passport-local';
 
 import { findUserById, findUserByOrgId } from '../lib/db/queries/user.queries';
 
-passport.serializeUser((user, done) => done(null, user._id));
+passport.serializeUser((user, done) => done(null, user.uid));
 
 passport.deserializeUser(async (req, id, done) =>
   done(null, await findUserById(id)),

@@ -7,8 +7,8 @@ const handler = nextConnect();
 handler.use(auth).get((req, res) => {
   try {
     if (!req.user) return res.json({ user: false });
-    const { _id: id, ...userData } = req.user;
-    return res.json({ user: { id, ...userData } });
+    const { user } = req;
+    return res.json({ user });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error.message);
