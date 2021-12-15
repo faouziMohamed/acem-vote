@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { model, Schema } from 'mongoose';
 
 import { decryptMessage, encryptMessage } from '../../security/aes.utils';

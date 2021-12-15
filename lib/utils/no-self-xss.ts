@@ -2,12 +2,14 @@
 // Forked from : https://github.com/sammwyy/no-self-xss
 /* Devtools-detect */
 // https://github.com/sindresorhus/devtools-detect
+
 import xssMsg from '../data/no-self-xss.json';
+import type { DevTools, Orientation } from './utils.types';
 
 export default function noSelfXssWarning({ onLoad = true } = {}) {
   const intervalTimer = devtoolsDetect();
   const { printWarn } = getMessage();
-  const showWarn = (event) => {
+  const showWarn = (event: Event) => {
     if (event.detail.isOpen) {
       printWarn();
     }
@@ -23,11 +25,11 @@ export default function noSelfXssWarning({ onLoad = true } = {}) {
   return { cleanUp, printWarn };
 }
 
-function devtoolsDetect() {
+function devtoolsDetect(): NodeJS.Timer | null {
   if (window.devtools) return null;
-  const devtools = { isOpen: false, orientation: undefined };
+  const devtools: DevTools = { isOpen: false, orientation: undefined };
   const threshold = 160;
-  const emitEvent = (isOpen, orientation) => {
+  const emitEvent = (isOpen: boolean, orientation: Orientation | undefined) => {
     window.dispatchEvent(
       new CustomEvent('devtoolschange', { detail: { isOpen, orientation } }),
     );
@@ -40,11 +42,7 @@ function devtoolsDetect() {
 
     if (
       !(heightThreshold && widthThreshold) &&
-      ((window.Firebug &&
-        window.Firebug.chrome &&
-        window.Firebug.chrome.isInitialized) ||
-        widthThreshold ||
-        heightThreshold)
+      (widthThreshold || heightThreshold)
     ) {
       if (
         (!devtools.isOpen || devtools.orientation !== orientation) &&
@@ -68,34 +66,43 @@ function devtoolsDetect() {
   return intervallRef;
 }
 
-/* No-self-xss */
-
 function getMessage() {
-  const nsxss = { defaultLanguage: 'fr' };
-  nsxss.translations = xssMsg || {};
-  nsxss.getBrowserLanguage = () => {
-    let lang = navigator?.language || navigator?.userLanguage || 'en';
+  interface Message {
+    title: string;
+    warning: string;
+    message: string;
+    subtitle: string;
+    warn: string;
+    info: string;
+  }
+
+  interface MessageMap {
+    [key: string]: Message;
+  }
+
+  const defaultLanguage = 'fr';
+  const translations: MessageMap = xssMsg || {};
+  const getBrowserLanguage = () => {
+    let lang = navigator?.language || 'en';
     if (lang.includes('-')) {
       [, lang] = lang.split('-');
     }
     return lang.toLowerCase();
   };
-  nsxss.getTranslation = () => {
-    const lang = nsxss.getBrowserLanguage();
-
-    const translation =
-      nsxss.translations[lang] || nsxss.translations[nsxss.defaultLanguage];
-    if (!nsxss.translations[lang]) {
+  const getTranslation = (): Message => {
+    const lang = getBrowserLanguage();
+    const translated: Message =
+      translations[lang] || translations[defaultLanguage];
+    if (!translated) {
       console.log(
-        `Unknown language ${lang}, displaying message in default language ${nsxss.defaultLanguage}`,
+        `Unknown language ${lang}, displaying message in default language ${defaultLanguage}`,
       );
     }
-    return translation;
+    return translated;
   };
 
-  nsxss.printWarn = () => {
-    const { title, warning, message, subtitle, warn, info } =
-      nsxss.getTranslation();
+  const printWarn = (): void => {
+    const { title, warning, message, subtitle, warn, info } = getTranslation();
     console.log(`%c${warning}`, 'font-size:8em;color:red;');
     console.log(
       `%c${title}`,
@@ -112,5 +119,11 @@ function getMessage() {
       'font-family:arial;font-size:16px;padding-top: 10px;',
     );
   };
-  return nsxss;
+  return {
+    defaultLanguage,
+    translations,
+    getBrowserLanguage,
+    getTranslation,
+    printWarn,
+  };
 }

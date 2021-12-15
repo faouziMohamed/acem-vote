@@ -1,6 +1,7 @@
+import type { Response } from '../../lib.types';
 import AppError from '../app-error';
 
-export function handleErrors(e, res, ErrorCls = AppError) {
+export function handleErrors(e: AppError, res: Response, ErrorCls = AppError) {
   let error = e;
   if (!(e instanceof AppError)) {
     error = new ErrorCls({
@@ -8,7 +9,7 @@ export function handleErrors(e, res, ErrorCls = AppError) {
       code: 400,
     });
     // eslint-disable-next-line no-console
-    console.log('Error', e.stack);
+    console.log('Error', (<Error>e).stack);
   }
   res.status(error.statusCode).json(error.toResponse());
 }
