@@ -1,15 +1,19 @@
-import { Schema } from 'mongoose';
+import type { PipelineStage } from 'mongoose';
 
-import User from '../models/user.model';
+import type {
+  IBasicRegionalEvent,
+  IdType,
+  IRegionalEventSchema,
+} from '../models/models.types';
 import { RegionalEvent } from '../models/vote-event.model';
 
 export async function createRegionalVoteEvent({
   eventName,
   startDate,
   eventDuration,
-  eventLocation = Schema.Types.ObjectId,
-  candidates = [User],
-}) {
+  eventLocation,
+  candidates,
+}: IRegionalEventSchema) {
   return RegionalEvent.create({
     eventName,
     startDate,
@@ -19,7 +23,7 @@ export async function createRegionalVoteEvent({
   });
 }
 
-const retrieveAndPopulateventQuery = [
+const retrieveAndPopulateventQuery: PipelineStage[] = [
   {
     $lookup: {
       from: 'users',
@@ -65,37 +69,38 @@ const retrieveAndPopulateventQuery = [
   },
   {
     $group: {
-      _id: '$_id',
       candidates: { $push: '$candidates' },
       root: { $first: '$$ROOT' },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+      _id: '$_id' as any,
     },
   },
   { $addFields: { 'root.candidates': '$candidates' } },
   { $replaceRoot: { newRoot: '$root' } },
 ];
 
-export async function getEventById(eventId) {
-  const [voteEvent] = await RegionalEvent.aggregate([
+export async function getEventById(eventId: IdType) {
+  const [voteEvent]: IBasicRegionalEvent[] = await RegionalEvent.aggregate([
     { $match: { _id: eventId } },
     ...retrieveAndPopulateventQuery,
   ]);
   return voteEvent;
 }
 
-export async function getEvents() {
+export async function getEvents(): Promise<IBasicRegionalEvent[]> {
   return RegionalEvent.aggregate([...retrieveAndPopulateventQuery]);
 }
 
 export async function getLastEvent() {
-  const [voteEvent] = await RegionalEvent.aggregate([
+  const [voteEvent]: IBasicRegionalEvent[] = await RegionalEvent.aggregate([
     { $sort: { startDate: -1 } },
     ...retrieveAndPopulateventQuery,
   ]);
   return voteEvent;
 }
 
-export const getEventByName = async (eventName) => {
-  const [voteEvent] = RegionalEvent.aggregate([
+export const getEventByName = async (eventName: string) => {
+  const [voteEvent]: IBasicRegionalEvent[] = await RegionalEvent.aggregate([
     { $match: { eventName } },
     ...retrieveAndPopulateventQuery,
   ]);

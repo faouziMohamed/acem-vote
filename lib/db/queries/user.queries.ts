@@ -1,6 +1,7 @@
-import { Schema, Types } from 'mongoose';
+import { PipelineStage, Types } from 'mongoose';
 
 import AppError from '../../errors/app-error';
+import type { IdType, IUserBasic, IUserSchema } from '../models/models.types';
 import User from '../models/user.model';
 
 export async function createUser({
@@ -9,22 +10,21 @@ export async function createUser({
   lastname,
   isCandidate,
   candidate,
-  details = {
-    city: Schema.Types.ObjectId,
-    email: '',
-    phone: '',
-    skills: [],
-    description: '',
-  },
-}) {
-  const userDetails = {
-    city: details.city,
-    skills: details.skills,
-    description: details.description,
+  details,
+}: IUserSchema) {
+  const userDetails: IUserSchema['details'] = {
+    city: details?.city,
+    skills: details?.skills,
+    description: details?.description,
   };
-  if (details.email) userDetails.email = details.email;
-  if (details.phone) userDetails.phone = details.phone;
-  const user = new User({ orgId, firstname, lastname, details: userDetails });
+  if (details?.email) userDetails.email = details.email;
+  if (details?.phone) userDetails.phone = details.phone;
+  const user = new User({
+    orgId,
+    firstname,
+    lastname,
+    details: userDetails,
+  });
 
   if (isCandidate) {
     if (!candidate) {
@@ -34,18 +34,17 @@ export async function createUser({
         code: 400,
       });
     }
-    const candidateData = {
+    const candidateData: IUserSchema['candidate'] = {
       post: candidate.post,
-      depositionDate: candidate.depositionDate || Date.now(),
-      isCandidate: true,
+      depositionDate: candidate.depositionDate || new Date(Date.now()),
     };
+    user.isCandidate = true;
     user.candidate = candidateData;
   }
-
   return user.save();
 }
 
-const basicAggregation = [
+const basicAggregation: PipelineStage[] = [
   {
     $lookup: {
       from: 'offices',
@@ -70,35 +69,36 @@ const basicAggregation = [
   },
 ];
 
-export const existsUserByOrgId = async (orgId) => User.exists({ orgId });
-export const existsUserById = async (_id) => User.exists({ _id });
+export const existsUserByOrgId = async (orgId: string) =>
+  User.exists({ orgId });
+export const existsUserById = async (_id: IdType) => User.exists({ _id });
 
-export const findUserByOrgId = async (orgId) => {
-  const [user] = await User.aggregate([
+export const findUserByOrgId = async (orgId: IdType) => {
+  const [user]: IUserBasic[] = await User.aggregate([
     { $match: { orgId } },
     ...basicAggregation,
   ]);
   return user;
 };
-export const findUserById = async (_id) => {
-  const [user] = await User.aggregate([
-    { $match: { _id: Types.ObjectId(_id) } },
+export const findUserById = async (_id: IdType) => {
+  const [user]: IUserBasic[] = await User.aggregate([
+    { $match: { _id: new Types.ObjectId(_id) } },
     ...basicAggregation,
   ]);
   return user;
 };
 
-export const updateUserById = async (_id, query = {}) => {
+export const updateUserById = async (_id: IdType, query: object = {}) => {
   return User.findByIdAndUpdate(_id, query, { new: true }).lean().exec();
 };
 
-export const updateUserByOrgId = async (orgId, query = {}) => {
+export const updateUserByOrgId = async (orgId: string, query: object = {}) => {
   return User.findOneAndUpdate({ orgId }, query, { new: true }).lean().exec();
 };
-export const deleteUserOrgId = async (orgId) => {
+export const deleteUserOrgId = async (orgId: string) => {
   return User.findOneAndDelete({ orgId }).lean().exec();
 };
 
-export const deleteUserById = async (_id) => {
+export const deleteUserById = async (_id: IdType) => {
   return User.findByIdAndDelete(_id).lean().exec();
 };

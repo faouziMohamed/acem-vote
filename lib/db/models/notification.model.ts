@@ -2,8 +2,9 @@ import { model, Schema } from 'mongoose';
 
 import { capitalize } from '../../utils/lib.utils';
 import { schemaOptions } from './model.utils';
+import type { INotificationSchema } from './models.types';
 
-const notificationSchema = new Schema(
+const notificationSchema: Schema<INotificationSchema> = new Schema(
   {
     title: { type: String, required: true },
     message: { type: String, required: true },
@@ -26,7 +27,7 @@ notificationSchema.pre('save', function reformatValues(next) {
   next();
 });
 
-const Notification =
-  global.Notification || model('Notification', notificationSchema);
-global.Notification = Notification;
-export default Notification;
+const ANotification =
+  global.ANotification || model('ANotification', notificationSchema);
+global.ANotification = ANotification;
+export default ANotification;

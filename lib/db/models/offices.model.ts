@@ -1,24 +1,28 @@
 import { model, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
+import type {
+  IExecutiveOfficeSchema,
+  IRegionalOfficeSchema,
+} from './models.types';
 
 const baseOptions = { ...schemaOptions, discriminatorKey: 'eventScope' };
 const officeSchema = new Schema({}, baseOptions);
 const officeModel = model('Office', officeSchema);
 
-const regionalOfficeSchema = new Schema({
+const regionalOfficeSchema: Schema<IRegionalOfficeSchema> = new Schema({
   cityName: { type: String, required: true, unique: true },
-  secretaryName: { type: Schema.Types.ObjectId },
-  controllerName: { type: Schema.Types.ObjectId },
-  culturalOfficerName: { type: Schema.Types.ObjectId },
-  sportsManagerName: { type: Schema.Types.ObjectId },
-  treasurerName: { type: Schema.Types.ObjectId },
+  secretaryName: { type: Schema.Types.ObjectId, ref: 'User' },
+  controllerName: { type: Schema.Types.ObjectId, ref: 'User' },
+  culturalOfficerName: { type: Schema.Types.ObjectId, ref: 'User' },
+  sportsManagerName: { type: Schema.Types.ObjectId, ref: 'User' },
+  treasurerName: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
-const executiveOfficeSchema = new Schema({
-  president: { type: Schema.Types.ObjectId },
-  vicePresidentName: { type: Schema.Types.ObjectId },
-  statutaryAuditorName: { type: Schema.Types.ObjectId },
+const executiveOfficeSchema: Schema<IExecutiveOfficeSchema> = new Schema({
+  presidentName: { type: Schema.Types.ObjectId, ref: 'User' },
+  vicePresidentName: { type: Schema.Types.ObjectId, ref: 'User' },
+  statutaryAuditorName: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
 regionalOfficeSchema.index({ cityName: 1 }, { unique: true });

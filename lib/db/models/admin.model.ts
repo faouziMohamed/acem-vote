@@ -1,12 +1,18 @@
 import { model, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
+import type { IAdminSchema } from './models.types';
 
-const adminSchema = new Schema(
+const adminSchema: Schema<IAdminSchema> = new Schema(
   {
-    username: { type: String, required: true, unique: true },
+    username: String,
     password: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'User', unique: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      unique: true,
+      required: true,
+    },
     privilegeLevel: {
       type: String,
       required: true,

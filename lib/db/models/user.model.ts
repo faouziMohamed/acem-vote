@@ -6,8 +6,9 @@ import {
   startCase,
 } from '../../utils/lib.utils';
 import { schemaOptions, voteCategories } from './model.utils';
+import type { IUserSchema } from './models.types';
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUserSchema>(
   {
     orgId: { type: String, required: true, unique: true },
     firstname: { type: String, required: true },
@@ -66,7 +67,7 @@ const userSchema = new Schema(
 
 userSchema.index({ orgId: 1 }, { unique: true });
 
-userSchema.pre('save', function reformatValues(next) {
+userSchema.pre<IUserSchema>('save', function reformatValues(next) {
   if (this.isModified('orgId')) {
     this.orgId = this.orgId.toLowerCase();
   }
@@ -76,8 +77,8 @@ userSchema.pre('save', function reformatValues(next) {
   if (this.isModified('lastname')) {
     this.set({ lastname: startCase(this.lastname) });
   }
-  if (this.isModified('email')) {
-    this.email = this.email.toLowerCase();
+  if (this.isModified('details.email') && this.details?.email) {
+    this.details.email = this.details.email.toLowerCase();
   }
   return next();
 });

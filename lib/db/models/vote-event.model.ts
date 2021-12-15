@@ -2,8 +2,13 @@ import { model, Schema } from 'mongoose';
 
 import { capitalize } from '../../utils/lib.utils';
 import { schemaOptions } from './model.utils';
+import type {
+  IExecutiveEventSchema,
+  IRegionalEventSchema,
+  IVoteEventSchema,
+} from './models.types';
 
-const voteEventSchema = new Schema(
+const voteEventSchema = new Schema<IVoteEventSchema>(
   {
     eventName: { type: String, required: true, unique: true },
     startDate: { type: Date, required: true },
@@ -19,8 +24,8 @@ const voteEventSchema = new Schema(
   { ...schemaOptions, discriminatorKey: 'eventScope' },
 );
 
-voteEventSchema.pre('save', async function preSave(next) {
-  this.updatedAt = Date.now();
+voteEventSchema.pre<IVoteEventSchema>('save', function preSave(next) {
+  this.updatedAt = new Date(Date.now());
   this.eventName = capitalize(this.eventName);
   next();
 });
@@ -28,7 +33,8 @@ voteEventSchema.pre('save', async function preSave(next) {
 voteEventSchema.index({ eventName: 1 }, { unique: true });
 const VoteEvent = global.VoteEvent || model('VoteEvent', voteEventSchema);
 global.VoteEvent = VoteEvent;
-const executiveSchema = new Schema({
+
+const executiveSchema = new Schema<IExecutiveEventSchema>({
   executiveMembers: {
     type: Schema.Types.ObjectId,
     ref: 'Executive',
@@ -36,7 +42,7 @@ const executiveSchema = new Schema({
   },
 });
 
-const regionalSchema = new Schema({
+const regionalSchema = new Schema<IRegionalEventSchema>({
   eventLocation: {
     type: Schema.Types.ObjectId,
     ref: 'Location',

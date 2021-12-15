@@ -1,12 +1,14 @@
+import type { Document } from 'mongoose';
+
 export const schemaOptions = {
-  timeStamp: true,
+  timestamps: true,
   toObject: {
-    transform: function transform(doc, ret) {
+    transform: function transform(_doc: Document, ret: Document) {
       delete ret.__v;
     },
   },
   toJSON: {
-    transform: function transform(doc, ret) {
+    transform: function transform(_doc: Document, ret: Document) {
       delete ret.__v;
     },
   },
