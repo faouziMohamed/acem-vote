@@ -1,28 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
 import Router from 'next/router';
-import useSWR, { KeyedMutator, SWRResponse } from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
 
 import FuturaSpinner from '../../components/spinners/futura';
-import { IUserBasic } from '../db/models/models.types';
+import { IBasicRegionalEvent, IUserBasic } from '../db/models/models.types';
+import AppError from '../errors/app-error';
 
-type IUserSWRFetch = SWRResponse<{ user: IUserBasic }, Error>;
 export const fetcherGET = (url: string) => fetch(url).then((r) => r.json());
 
 type UseUserType = [
   IUserBasic | undefined,
-  { loading: boolean; mutate: KeyedMutator<{ user: IUserBasic }> },
+  {
+    loading: boolean;
+    mutate: KeyedMutator<{ user: IUserBasic }>;
+    error: AppError | undefined;
+  },
 ];
 
 export function useUser(username = ''): UseUserType {
   /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-  const { data, mutate }: IUserSWRFetch = useSWR(
+  const { data, mutate, error } = useSWR<{ user: IUserBasic }, AppError>(
     `/api/user/${username || ''}`,
     fetcherGET,
   );
   // if data is not defined, the query has not completed
   const loading = !data;
   const user = data?.user;
-  return [user, { mutate, loading }];
+  return [user, { mutate, loading, error }];
 }
 
 export const useFetch = (url: string) => {
@@ -34,8 +38,16 @@ export const useCandidates = (cid = '') => {
   return useFetch(`/api/candidates/${cid}`);
 };
 
+type BRE = IBasicRegionalEvent;
+type RegionalEventReturn = [
+  BRE,
+  { loading: boolean; error: any; mutate: KeyedMutator<BRE> },
+];
+
 export const useEvents = (eid = '') => {
-  return useFetch(`/api/event/${eid}`);
+  const event = useFetch(`/api/event/${eid}`) as RegionalEventReturn;
+  // console.log('event', event);
+  return event;
 };
 
 export function useAuthVerification() {
@@ -50,11 +62,15 @@ export function useAuthVerification() {
 
 interface PostJsonTypes {
   url: string;
-  data: never;
+  data?: any;
   stringify?: boolean;
 }
 
-export async function postJSON({ url, data, stringify = true }: PostJsonTypes) {
+export async function postJSON({
+  url,
+  data = null,
+  stringify = true,
+}: PostJsonTypes) {
   const dataString = stringify ? JSON.stringify(data) : data;
   const res = await fetch(url, {
     method: 'POST',

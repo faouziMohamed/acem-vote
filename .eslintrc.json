@@ -49,6 +49,7 @@
     "no-implicit-coercion": "error",
     "no-underscore-dangle": "off",
     "no-var": "warn",
+    "no-void": "off",
     "no-empty-function": "warn",
     "no-confusing-arrow": ["error", { "allowParens": true }],
     "no-mixed-operators": "error",
@@ -64,6 +65,7 @@
     "import/no-duplicates": "error",
     "react-hooks/rules-of-hooks": "error",
     "react/no-unstable-nested-components": "off",
+    "react/require-default-props": "off",
     "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
@@ -72,6 +74,10 @@
         "specialLink": ["hrefLeft", "hrefRight"],
         "aspects": ["invalidHref", "preferButton"]
       }
+    ],
+    "jsx-a11y/no-noninteractive-tabindex": [
+      "error",
+      { "tags": ["div"], "roles": ["tabpanel"] }
     ]
   }
 }

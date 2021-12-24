@@ -4,10 +4,16 @@ import { findUserByOrgId } from '../db/queries/user.queries';
 import { getNewVoteID } from '../db/queries/vote-id.queries';
 import AppError from '../errors/app-error';
 import type { Request } from '../lib.types';
+import { generateRandomString } from '../security/aes.utils';
 import PGPEncryptor from '../security/pgpEncryptor';
 import type { ArmoredKeys, UserId } from '../security/security.types';
 import type { IGetKeysParams } from './utils.types';
 
+export const generateUserEmail = (
+  fname: string,
+  lname: string,
+  orgId: string,
+) => `${fname}.${lname}-${orgId}@acem.evote.com`;
 export async function generateNewPGPKeys({
   name = '',
   email = '',
@@ -20,31 +26,46 @@ export async function generateNewServerKeys() {
   const name = process.env.ENCRYPTION_SERVER_KEY_NAME!;
   const email = process.env.ENCRYPTION_SERVER_KEY_EMAIL!;
   const passphrase = process.env.ENCRYPTION_SERVER_KEY_PASSPHRASE!;
+  /* eslint-disable no-console */
+  console.log('Created new server keys');
+  console.log(`${name} keys created!`);
+  /* eslint-enable no-console */
+  return generateNewKeys(name, email, passphrase);
+}
+
+export async function generateNewUserKeys(
+  name: string,
+  email: string,
+  passphrase: string,
+) {
+  try {
+    return await generateNewKeys(name, email, passphrase);
+  } catch (error) {
+    const message = 'Impossible de sauvegarder les clés';
+    const hint = 'Votre compte est déjà configurée.';
+    throw new AppError({ message, code: 400, hint });
+  }
+}
+
+async function generateNewKeys(
+  name: string,
+  email: string,
+  passphrase: string,
+) {
   const encryptor = await generateNewPGPKeys({ name, email, passphrase });
-
   const keys = encryptor.getArmoredKeys();
-  const {
-    privateArmoredKey = '',
-    publicArmoredKey = '',
-    revocationCertificate = '',
-  } = keys;
+  const { privateArmoredKey, publicArmoredKey, revocationCertificate } = keys;
 
-  const options = {
-    privateArmoredKey,
-    publicArmoredKey,
-    revocationCertificate,
-    passphrase,
-    knownEntities: encryptor.foreignPubKeys,
+  await createKeys({
     name,
     email,
-  };
+    privateArmoredKey,
+    publicArmoredKey,
+    passphrase,
+    revocationCertificate,
+  });
 
-  await createKeys(options);
-  // eslint-disable-next-line no-console
-  console.log('Created new server keys');
-  // eslint-disable-next-line no-console
-  console.log(`${name} keys created!`);
-  return { serverPGPEncryptor: encryptor, keys };
+  return { keys, encryptor };
 }
 
 export async function getServerKeys() {
@@ -56,10 +77,7 @@ export async function getServerKeys() {
   };
   const name = process.env.ENCRYPTION_SERVER_KEY_NAME || '';
   const email = process.env.ENCRYPTION_SERVER_KEY_EMAIL || '';
-
-  const keys = await getKeys({ name, email, filter });
-
-  return keys || generateNewServerKeys();
+  return getKeys({ name, email, filter });
 }
 
 export async function getUserKeys({ name, email }: UserId) {
@@ -74,20 +92,23 @@ export async function getUserKeys({ name, email }: UserId) {
 
 async function getKeys({ name, email, filter = {} }: IGetKeysParams) {
   const keys = await findEntityKeys({ query: { name, email }, filter });
-  if (keys && keys.privateArmoredKey) {
-    const { privateArmoredKey } = keys;
-    const { passphrase = '' } = keys;
-    const encryptor = await PGPEncryptor.fromArmoredPrivateKey(
-      privateArmoredKey,
-      passphrase,
-    );
-    return { keys, serverPGPEncryptor: encryptor };
+  const serverName = process.env.ENCRYPTION_SERVER_KEY_NAME;
+  if (!keys) {
+    return name === serverName
+      ? generateNewServerKeys()
+      : generateNewUserKeys(name, email, generateRandomString());
   }
-  return false;
+  const { privateArmoredKey, passphrase } = keys;
+  const encryptor = await PGPEncryptor.fromArmoredPrivateKey(
+    privateArmoredKey,
+    passphrase,
+  );
+  const genKeys: ArmoredKeys = encryptor.getArmoredKeys();
+  return { keys: genKeys, encryptor };
 }
 
-export async function findUser(idName: string): Promise<IUserBasic> {
-  const user: IUserBasic = await findUserByOrgId(idName);
+export async function findUser(orgId: string): Promise<IUserBasic> {
+  const user: IUserBasic = await findUserByOrgId(orgId);
   if (!user) {
     throw new AppError({
       message: 'Utilisateur non trouvé.',
@@ -151,8 +172,8 @@ export async function decryptReqBodyMsg({
   encrypted,
   toObject = true,
 }: IDecryptMessage): Promise<string> {
-  const { serverPGPEncryptor } = await getServerKeys();
-  const decryptedMsg = await serverPGPEncryptor.decryptMessage(encrypted);
+  const { encryptor } = await getServerKeys();
+  const decryptedMsg = await encryptor.decryptMessage(encrypted);
   const msg = decryptedMsg.data.toString();
   return toObject ? (JSON.parse(msg) as string) : msg;
 }
@@ -169,8 +190,8 @@ export async function generateAndSaveVoteID(req: ReqBody) {
 
   const id = await getNewVoteID(req.user.uid).then((_id) => _id.toString());
   const voteID = JSON.stringify({ id });
-  const { serverPGPEncryptor: serverEnc } = await getServerKeys();
-  const voteIdEncrypted = await encryptMsg(publicArmoredKey, serverEnc, voteID);
+  const { encryptor } = await getServerKeys();
+  const voteIdEncrypted = await encryptMsg(publicArmoredKey, encryptor, voteID);
   return voteIdEncrypted;
 }
 

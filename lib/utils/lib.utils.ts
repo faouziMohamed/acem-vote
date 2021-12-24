@@ -1,6 +1,4 @@
-import { KeyedMutator } from 'swr';
-
-import type { IUserBasic } from '../db/models/models.types';
+import { mutate } from 'swr';
 
 const setStartCase = (txt: string) =>
   txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
@@ -25,12 +23,11 @@ export function golfyNumber(n: number): string | number {
   return suffix ? `${round(n / pow(1000, base), 2)}${suffix}` : n;
 }
 
-export async function disconnectUser(
-  mutate: KeyedMutator<{ user: IUserBasic | null }>,
-) {
+export async function disconnectUser() {
   await fetch('/api/logout');
   window.location.href = '/';
-  return mutate({ user: null });
+  void mutate('/api/user', {}, false);
+  return mutate('/api/user');
 }
 
 export const appendZero = (num: number) => (num < 10 ? `0${num}` : num);

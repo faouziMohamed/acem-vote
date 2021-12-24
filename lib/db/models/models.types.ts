@@ -48,6 +48,8 @@ export interface IUserBasic extends Express.User {
     skills?: string[];
     description?: string;
     city?: { cityName?: string; cityId?: string };
+    email?: string;
+    phone?: string;
   };
   events?: string[];
   completedEvents?: string[];
@@ -56,7 +58,7 @@ export interface IUserBasic extends Express.User {
     eventID: string;
     catNames: VoteCategories[];
     voteCompleted: boolean;
-  };
+  }[];
   isCandidate?: boolean;
   isMembershipActive?: boolean;
   uid: string;
@@ -98,13 +100,11 @@ export interface IUserSchema extends Document {
   events?: Types.ObjectId[];
   completedEvents?: Types.ObjectId[];
   missedEvents?: Types.ObjectId[];
-  votedCategories?: [
-    {
-      eventId: Types.ObjectId;
-      catNames: VoteCategories[];
-      voteCompleted: boolean;
-    },
-  ];
+  votedCategories?: {
+    eventId: Types.ObjectId;
+    catNames: VoteCategories[];
+    voteCompleted: boolean;
+  }[];
   isCandidate?: boolean;
   candidate?: {
     post: VoteCategories;
@@ -124,7 +124,7 @@ export interface IKeysSchema extends Document {
   name: string;
   publicArmoredKey: string;
   privateArmoredKey: string;
-  revocationCertificate?: string | null;
+  revocationCertificate?: string;
   passphrase?: string;
   knownEntities?: { name: string; publicKey: string }[];
 }

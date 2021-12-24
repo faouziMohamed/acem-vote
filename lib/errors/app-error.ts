@@ -10,7 +10,7 @@ export default class AppError extends Error {
 
   public hint: string;
 
-  constructor({ message, code, hint }: AppErrorType) {
+  constructor({ message, code, hint }: AppErrorType = {}) {
     super(message || 'An error occured');
     this.name = this.constructor.name;
     this._statusCode = code || 500;

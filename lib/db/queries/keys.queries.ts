@@ -1,4 +1,4 @@
-import { IKeyFilter } from '../../utils/utils.types';
+import type { IKeyFilter } from '../../utils/utils.types';
 import Keys, { decryptPassphrase } from '../models/keys.model';
 
 interface ICreateKeys {
@@ -7,7 +7,7 @@ interface ICreateKeys {
   publicArmoredKey: string;
   privateArmoredKey: string;
   passphrase: string;
-  knownEntities: string[];
+  knownEntities?: string[];
   revocationCertificate?: string;
 }
 
