@@ -1,5 +1,5 @@
 @use '../../00-globals/variables' as v;
-@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/global-mixin' as gmix;
 
 %useCircularRadius {
   border-radius: 50%;
@@ -19,7 +19,7 @@
 
 .user_profil_thumb {
   @extend %useCircularRadius;
-  @include useSquareSize(100%);
+  @include gmix.size(100%);
   border: 1px solid #b5c2c2;
 }
 
@@ -30,7 +30,7 @@
 .user_menu_card {
   @extend %useRadius-0_6rem;
   @extend %useZindexLevelOne;
-  @include usePosition(absolute, $right: 0, $top: calc(100% + 0.6rem));
+  @include gmix.position(absolute, $right: 0, $top: calc(100% + 0.6rem));
   display: flex;
   flex-direction: column;
   width: 10rem;
@@ -47,20 +47,20 @@
 
 .user {
   &-figure {
-    @include useFlexbox(column);
+    @include gmix.flexbox(column);
     @extend %useZindexLevelOne;
   }
 
   &-picture {
-    @include useFlexbox(none);
-    @include useSquareSize(7.6rem);
+    @include gmix.flexbox(none);
+    @include gmix.size(7.6rem);
     flex: 1;
     padding-block: 0.4rem;
 
     &-img {
       @extend %useCircularRadius;
       display: block;
-      @include useSquareSize(100%);
+      @include gmix.size(100%);
       background-color: transparent;
     }
   }
@@ -79,7 +79,7 @@
 
 .action {
   &-wrapper {
-    @include useFlexbox(column, $jt: none, $al: flex-start);
+    @include gmix.flexbox(column, $jt: none, $al: flex-start);
     width: 100%;
     list-style-type: none;
     border-radius: 0 0 0.65rem 0.65rem;

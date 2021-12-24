@@ -1,8 +1,8 @@
 @use '../../00-globals/variables' as v;
-@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/global-mixin' as gmix;
 
 .main_page {
-  @include useFlexbox(column, $jt: none, $al: none);
+  @include gmix.flexbox(column, $jt: none, $al: none);
   flex: 1 1 auto;
   background-color: #fffdfd;
   overflow: hidden;
@@ -10,14 +10,14 @@
 }
 
 .main_content_root {
-  @include useSquareSize(100%);
+  @include gmix.size(100%);
   @extend %useScrollbarStyle;
   overflow: auto;
   position: relative;
 }
 
 .main_content {
-  @include useFlexbox(column, $jt: none, $al: center);
+  @include gmix.flexbox(column, $jt: none, $al: center);
   padding: 1rem;
   min-width: 280px;
 }

@@ -1,5 +1,5 @@
 @use './variables' as v;
-@use './global-mixin' as *;
+@use './global-mixin' as gmix;
 
 button {
   font-family: v.$secondary_font;
@@ -16,5 +16,5 @@ button {
   width: max-content;
   border-radius: 0.2rem;
   cursor: pointer;
-  @include createButtonTheme(v.$primary_color);
+  @include gmix.createButtonTheme(v.$primary_color);
 }

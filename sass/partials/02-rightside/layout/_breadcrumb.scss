@@ -1,8 +1,8 @@
 @use '../../00-globals/variables' as v;
-@use '../../00-globals/global-mixin' as *;
+@use '../../00-globals/global-mixin' as gmix;
 
 .breadcrumb {
-  @include useFlexbox($jt: none, $dir: none);
+  @include gmix.flexbox($jt: none, $dir: none);
   padding: 0.5rem 0.3rem;
   background-color: rgba(v.$primary_color, 0.05);
   font-family: v.$secondary_font;
@@ -14,7 +14,7 @@
   &__path {
     display: flex;
     &.active::before {
-      @include useFlexbox($dir: 0);
+      @include gmix.flexbox($dir: 0);
       content: '>';
       padding-inline: 0.5rem;
     }

@@ -1,9 +1,9 @@
 @use '../../../00-globals/variables' as v;
-@use '../../../00-globals/global-mixin' as *;
+@use '../../../00-globals/global-mixin' as gmix;
 
 .list_candidates {
-  @include useFlexbox(column, $al: flex-start);
-  @include useSquareSize(100%);
+  @include gmix.flexbox(column, $al: flex-start);
+  @include gmix.size(100%);
   list-style-type: none;
   gap: 1rem;
 }
@@ -28,22 +28,22 @@
   gap: 0.75rem;
   padding: 0.5rem;
   background-color: lighten(v.$primary_color, 65%);
-  @include useFlexbox(column, $jt: flex-start, $al: flex-start);
-  @include useSquareSize(100%);
+  @include gmix.flexbox(column, $jt: flex-start, $al: flex-start);
+  @include gmix.size(100%);
 
   &__overlay {
     @extend %common-props;
-    @include usePosition(absolute, 0, 0);
-    @include useSquareSize(100%);
+    @include gmix.position(absolute, 0, 0);
+    @include gmix.size(100%);
     border: 1px solid lighten(v.$primary_color, 55%);
     box-shadow: 0 0 1.5px 0.5px darken(rgba(v.$primary_color, 30%), 10%);
     background-color: rgba(v.$primary_color, 0.5%);
     z-index: v.$zindex_base_level;
 
-    @include useInfoIndicator();
+    @include gmix.useInfoIndicator();
 
     &:is(:hover, :focus) {
-      @include useHovered-info-indicator();
+      @include gmix.useHovered-info-indicator();
       box-shadow: 0 0 2.5px 1.5px darken(rgba(v.$primary_color, 60%), 10%);
       background-color: rgba(v.$primary_color, 5%);
     }
@@ -56,7 +56,7 @@
   display: flex;
   align-self: flex-start;
   max-width: $size;
-  @include useSquareSize($size);
+  @include gmix.size($size);
   flex-basis: $size;
   clip-path: circle(50% at 50%);
   position: relative;
@@ -65,7 +65,7 @@
   flex-shrink: 0;
   background-color: rgba(v.$primary_color, 7%);
   &__img {
-    @include useSquareSize(100%);
+    @include gmix.size(100%);
     object-fit: cover;
   }
 }

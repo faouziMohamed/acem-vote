@@ -1,0 +1,84 @@
+/* 
+<div class="checkbox_check">
+  <label class="label_checker">
+    <div class="input_container check">
+      <input
+        tabindex="0"
+        type="checkbox"
+        class="hidden checkbox-checker"
+      />
+      <span class="checker"></span>
+    </div>
+    <span class="label_switch--txt">Admin</span>
+  </label>
+</div>
+*/
+
+@use '../common' as *;
+@use '../../partials/00-globals/global-mixin' as gmix;
+@use '../../partials/00-globals/variables' as v;
+
+.checkbox_check {
+  position: relative;
+  @include gmix.flexbox($al: center, $inline: 1);
+  user-select: none;
+}
+
+.label_checker {
+  @include gmix.flexbox($jt: flex-start);
+  gap: 3px;
+  border-radius: 0.5rem;
+  padding: 0.2rem;
+  background-color: rgba(202, 202, 202, 0.082);
+  box-shadow: 0 0 2px 1px rgba(99, 83, 83, 0.241);
+  cursor: pointer;
+  min-width: 4rem;
+}
+
+.label_txt {
+  color: rgb(57, 73, 83);
+  font-weight: 600;
+  font-family: Roboto, Oxygen, Ubuntu, 'Open Sans', sans-serif;
+}
+
+.checker {
+  $bd-color: rgba(51, 51, 51, 0.527);
+  @include gmix.size(1.2rem);
+  @include gmix.flexbox(none, center, center);
+  border-radius: 50%;
+  transition: all 10ms ease-in-out;
+  box-shadow: none;
+  border: 2px solid $bd-color;
+  transition-duration: 100ms;
+
+  &::before {
+    $color: darken(v.$secondary_color, 100%);
+    border-radius: 50%;
+    box-shadow: none;
+  }
+
+  &:hover {
+    border-color: rgba($bd-color, 70%);
+  }
+}
+
+.checkbox_checker:checked {
+  & + .checker {
+    $color: lighten(v.$secondary_color, 10%);
+    border-color: $color;
+    &::before {
+      content: '';
+      @include gmix.flexbox();
+      @include gmix.size(70%);
+      transform: scale(1);
+      box-shadow: none;
+      background-color: $color;
+    }
+    &:hover {
+      border-color: v.$secondary_color;
+      &::before {
+        background-color: v.$secondary_color;
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
 @use '../00-globals/variables' as v;
-@use '../00-globals/global-mixin' as *;
+@use '../00-globals/global-mixin' as gmix;
 
 .root {
   @extend %useScrollbarStyle;
-  @include useFlexbox(column, flex-start, stretch);
+  @include gmix.flexbox(column, flex-start, stretch);
   overflow: auto;
-  @include useSquareSize(100%);
+  @include gmix.size(100%);
   position: absolute;
   top: 0;
   left: 0;
@@ -15,7 +15,7 @@
 }
 
 .left_side {
-  @include useFlexbox(column);
+  @include gmix.flexbox(column);
   background-color: darken(v.$primary_color, 3%);
   flex: 1 1 10%;
 }
@@ -28,7 +28,7 @@
     position: relative;
   }
   &__img {
-    @include useSquareSize(100%);
+    @include gmix.size(100%);
     object-fit: cover;
   }
 }
@@ -113,7 +113,7 @@
   gap: 0.5rem;
 
   @at-root {
-    @include useFormFloating;
+    @include gmix.useFormFloating;
   }
 }
 
@@ -124,7 +124,7 @@
 }
 
 .action {
-  @include useFlexbox();
+  @include gmix.flexbox();
 }
 
 .action_btn {

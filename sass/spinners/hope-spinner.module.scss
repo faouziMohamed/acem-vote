@@ -1,4 +1,4 @@
-@use '../partials/00-globals/global-mixin' as *;
+@use '../partials/00-globals/global-mixin' as gmix;
 
 .loading {
   display: flex;
@@ -19,7 +19,7 @@
     border-style: double;
     border-width: 3px;
 
-    @include useSquareSize(1.5rem);
+    @include gmix.size(1.5rem);
   }
 
   @keyframes rotation {
