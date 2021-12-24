@@ -1,3 +1,4 @@
+/** @type {import('next').NextConfig} */
 const { createSecureHeaders } = require('next-secure-headers');
 
 module.exports = {
