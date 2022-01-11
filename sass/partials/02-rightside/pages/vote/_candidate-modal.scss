@@ -8,15 +8,6 @@
   padding: 1rem;
 }
 
-.candidate_modal_container {
-  @include gmix.flexbox(column);
-  @include gmix.position(absolute, 0, 0);
-  @include gmix.size(100%);
-  z-index: v.$zindex_modal_level_one;
-  transition: background-color 0.01s ease;
-  background-color: rgba(darken(v.$primary_color, 5%), 0.39);
-}
-
 .candidate_modal {
   @extend %padding-1rem;
   @extend %border-radius-base;
@@ -40,6 +31,7 @@
     border-radius: 50%;
     background-color: #a9c7ffdb;
     color: rgb(33, 33, 33);
+    max-width: 573px;
     &:hover {
       color: rgb(255, 255, 255);
       background-color: #00a573;

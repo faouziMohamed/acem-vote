@@ -1,19 +1,13 @@
 import nextConnect from 'next-connect';
 
-import {
-  findUserByOrgId,
-  updateUserByOrgId,
-} from '../../../lib/db/queries/user.queries';
-import AppError from '../../../lib/errors/app-error';
-import { handleErrors } from '../../../lib/errors/http/handlers';
-import type { Request, Response } from '../../../lib/lib.types';
-import { generateRandomString } from '../../../lib/security/aes.utils';
-import {
-  generateNewUserKeys,
-  generateUserEmail,
-} from '../../../lib/utils/keys.utils';
-import auth from '../../../middleware/authentication';
-import { checkAuth } from '../../../middleware/init-middleware';
+import { findUserByOrgId, updateUserByOrgId } from '@/db/queries/user.queries';
+import AppError from '@/errors/app-error';
+import { handleErrors } from '@/errors/http/handlers';
+import type { Request, Response } from '@/lib/lib.types';
+import auth from '@/lib/middlewares/authentication';
+import { checkAuth } from '@/lib/middlewares/init-middleware';
+import { generateRandomString } from '@/security/aes.utils';
+import { generateNewUserKeys, generateUserEmail } from '@/utils/keys.utils';
 
 const handler = nextConnect()
   .use(auth)

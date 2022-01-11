@@ -1,18 +1,18 @@
 import nextConnect from 'next-connect';
 
-import AppError from '../../../../lib/errors/app-error';
-import { handleErrors } from '../../../../lib/errors/http/handlers';
-import type { Request, Response } from '../../../../lib/lib.types';
-import type PGPEncryptor from '../../../../lib/security/pgpEncryptor';
-import { ArmoredKeys } from '../../../../lib/security/security.types';
+import AppError from '@/errors/app-error';
+import { handleErrors } from '@/errors/http/handlers';
+import type { Request, Response } from '@/lib/lib.types';
+import auth from '@/lib/middlewares/authentication';
+import { checkAuth } from '@/lib/middlewares/init-middleware';
+import type PGPEncryptor from '@/security/pgpEncryptor';
+import { ArmoredKeys } from '@/security/security.types';
 import {
   findUser,
   generateUserEmail,
   getServerKeys,
   getUserKeys,
-} from '../../../../lib/utils/keys.utils';
-import auth from '../../../../middleware/authentication';
-import { checkAuth } from '../../../../middleware/init-middleware';
+} from '@/utils/keys.utils';
 
 const handler = nextConnect()
   .use(auth)

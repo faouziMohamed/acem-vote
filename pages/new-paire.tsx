@@ -1,14 +1,15 @@
 import Router from 'next/router';
 import { memo, useEffect, useRef, useState } from 'react';
 
-import AuthLayout from '../components/auth/auth-layout';
-import ActionButton from '../components/buttons/action-button';
-import FuturaSpinner from '../components/spinners/futura';
-import HopeSpinner from '../components/spinners/hope';
-import { IUserBasic } from '../lib/db/models/models.types';
-import AppError from '../lib/errors/app-error';
-import { postJSON, useUser } from '../lib/hooks/hooks';
-import style from '../sass/new-paire.module.scss';
+import AuthLayout from '@/components/auth/auth-layout';
+import ActionButton from '@/components/buttons/action-button';
+import FuturaSpinner from '@/components/spinners/futura';
+import HopeSpinner from '@/components/spinners/hope';
+import { IUserBasic } from '@/db/models/models.types';
+import AppError from '@/errors/app-error';
+import { useUser } from '@/hooks/hooks';
+import style from '@/sass/new-paire.module.scss';
+import { postJSON } from '@/utils/lib.utils';
 
 export default function NewPaire() {
   const [user, { loading }] = useUser();

@@ -2,9 +2,9 @@ import Router from 'next/router';
 import type { Dispatch, SetStateAction, SyntheticEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import AuthLayout from '../components/auth/auth-layout';
-import { useAuthVerification } from '../lib/hooks/hooks';
-import style from '../sass/auth.module.scss';
+import AuthLayout from '@/components/auth/auth-layout';
+import { useAuthVerification } from '@/hooks/hooks';
+import style from '@/sass/auth.module.scss';
 
 export default function Login() {
   const [errorMessage, setErrorMsg] = useState('');
@@ -14,7 +14,7 @@ export default function Login() {
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    Router.prefetch('/vote');
+    Router.prefetch('/candidates?etype=ken');
   }, []);
   if (useAuthVerification()) return false;
   return (
@@ -119,7 +119,8 @@ export async function logInUser(body: { userid: string }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  if ([200, 201].includes(response.status)) await Router.push('/vote');
+  if ([200, 201].includes(response.status))
+    await Router.push('/candidates?etype=ken');
   else {
     const { error } = (await response.json()) as { error: string };
     throw new Error(error);

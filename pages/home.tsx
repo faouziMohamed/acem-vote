@@ -5,12 +5,12 @@ import Router from 'next/router';
 import { useState } from 'react';
 import Countdown from 'react-countdown';
 
-import AutoTypingText from '../components/effects/auto-typing-text';
-import CountdownView from '../components/misc/countdown';
-import { BubbleLoader } from '../components/spinners/bubble-loader';
-import FuturaSpinner from '../components/spinners/futura';
-import { useEvents, useUser } from '../lib/hooks/hooks';
-import style from '../sass/home.module.scss';
+import AutoTypingText from '@/components/effects/auto-typing-text';
+import CountdownView from '@/components/misc/countdown';
+import { BubbleLoader } from '@/components/spinners/bubble-loader';
+import FuturaSpinner from '@/components/spinners/futura';
+import { useEvents, useUser } from '@/lib/hooks/hooks';
+import style from '@/sass/home.module.scss';
 
 interface ICountdownTime {
   days: number;
@@ -23,7 +23,6 @@ const Home: NextPage = () => {
   const [user, { loading }] = useUser();
   const [showCountdown, setShowCountdown] = useState(true);
   const [event] = useEvents();
-  // console.log('event', event);
   if (loading || !event) return <BubbleLoader />;
   if (user) {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -47,28 +46,12 @@ const Home: NextPage = () => {
     <div className={style.home_parent}>
       <div className={style.page_overlay} />
       {showCountdown && (
-        <div className='modal-container'>
+        <div className='fixed top-0 left-0 w-full h-full bg-[#000] bg-opacity-50 z-[9999] flex justify-center items-center'>
           <Countdown
             date={new Date(event.startDate)}
             onComplete={() => Router.push('/vote')}
             renderer={Renderer}
           />
-          <style>
-            {`
-            .modal-container {
-              position: fixed;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background-color: rgba(0, 0, 0, 0.5);
-              z-index: 9999;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            }
-          `}
-          </style>
         </div>
       )}
 
@@ -174,7 +157,7 @@ function Features() {
           >
             Commencer maintenant{' '}
             <Countdown
-              date={new Date(event.startDate)}
+              date={new Date(event!.startDate)}
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderer={(props) => <Rendrer {...props} />}
             />

@@ -1,11 +1,11 @@
 import nextConnect from 'next-connect';
 
-import AuthError from '../../../lib/errors/auth-error';
-import { handleErrors } from '../../../lib/errors/http/handlers';
-import type { Request, Response } from '../../../lib/lib.types';
-import { generateAndSaveVoteID } from '../../../lib/utils/keys.utils';
-import auth from '../../../middleware/authentication';
-import { checkAuth } from '../../../middleware/init-middleware';
+import AuthError from '@/errors/auth-error';
+import { handleErrors } from '@/errors/http/handlers';
+import type { Request, Response } from '@/lib/lib.types';
+import auth from '@/middlewares/authentication';
+import { checkAuth } from '@/middlewares/init-middleware';
+import { generateAndSaveVoteID } from '@/utils/keys.utils';
 
 const handler = nextConnect();
 

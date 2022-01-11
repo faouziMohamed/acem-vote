@@ -97,6 +97,12 @@ $max-width: 600px;
   gap: 0.5rem;
 }
 
+@media (min-width: 456px) and (max-width: 768px) {
+  .seconds {
+    font-size: 1.5rem;
+  }
+}
+
 .time {
   border-radius: 3px;
   background: lighten($color, 20%);

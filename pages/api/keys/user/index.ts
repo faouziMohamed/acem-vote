@@ -1,16 +1,12 @@
 import nextConnect from 'next-connect';
 
-// import { IKeyBasic } from '../../../../lib/db/models/models.types';
-import AppError from '../../../../lib/errors/app-error';
-import { handleErrors } from '../../../../lib/errors/http/handlers';
-import { Request, Response } from '../../../../lib/lib.types';
-import { encryptMessage } from '../../../../lib/security/aes.utils';
-import {
-  decryptReqBodyMsg,
-  getUserKeys,
-} from '../../../../lib/utils/keys.utils';
-import auth from '../../../../middleware/authentication';
-import { checkAuth } from '../../../../middleware/init-middleware';
+import AppError from '@/errors/app-error';
+import { handleErrors } from '@/errors/http/handlers';
+import { Request, Response } from '@/lib/lib.types';
+import auth from '@/middlewares/authentication';
+import { checkAuth } from '@/middlewares/init-middleware';
+import { encryptMessage } from '@/security/aes.utils';
+import { decryptReqBodyMsg, getUserKeys } from '@/utils/keys.utils';
 
 const handler = nextConnect()
   .use(auth)

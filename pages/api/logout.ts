@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 
-import type { Request, Response } from '../../lib/lib.types';
-import auth from '../../middleware/authentication';
+import type { Request, Response } from '@/lib/lib.types';
+import auth from '@/middlewares/authentication';
 
 const logoutHandler = nextConnect();
 

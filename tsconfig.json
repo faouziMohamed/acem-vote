@@ -15,8 +15,26 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["src/components/*"],
+      "@/pages/*": ["pages/*"],
+      "@/controllers/*": ["src/controllers/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/db/*": ["src/lib/db/*"],
+      "@/data/*": ["src/lib/data/*"],
+      "@/errors/*": ["src/lib/errors/*"],
+      "@/hooks/*": ["src/lib/hooks/*"],
+      "@/security/*": ["src/lib/security/*"],
+      "@/utils/*": ["src/lib/utils/*"],
+      "@/middlewares/*": ["src/lib/middlewares/*"],
+      "@/public/*": ["public/*"],
+      "@/sass/*": ["sass/*"],
+      "@/themes/*": ["src/themes/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "tests"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
+  "exclude": ["node_modules", "tests", "public/**/*.js"]
 }
