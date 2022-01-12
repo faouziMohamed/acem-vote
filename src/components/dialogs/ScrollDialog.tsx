@@ -9,22 +9,24 @@ import {
   Typography,
 } from '@mui/material';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { ICandidateDetails } from '@/lib/db/models/models.types';
 
 import Transition from './Transition';
 
 interface ScrollDialogProps {
-  isOpen?: boolean;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   candidate: ICandidateDetails;
 }
 
-export default function ScrollDialog({
-  isOpen = false,
+export default function CandidateDialog({
+  open = false,
+  setOpen,
   candidate,
 }: ScrollDialogProps) {
-  const [open, setOpen] = useState(isOpen === true);
   const handleClose = () => setOpen(false);
   const descriptionElementRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -35,9 +37,8 @@ export default function ScrollDialog({
       }
     }
   }, [open]);
-
   return (
-    <div>
+    <div className='dialog'>
       <Dialog
         open={open}
         onClose={handleClose}

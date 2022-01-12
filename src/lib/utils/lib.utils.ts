@@ -5,10 +5,12 @@ const setStartCase = (txt: string) =>
 
 export const startCase = (str: string) => str.replace(/\w\S*/g, setStartCase);
 export const capitalize = (str: string) => setStartCase(str);
+
 export const removeTrailingSlash = (str: string) => str.replace(/\/$/, '');
 export const removeExtraSpaces = (str: string) => str.replace(/\s+/g, ' ');
 export const pow = (x: number, y: number): number => x ** y;
 export const isEmpty = (str: string) => !str || str.trim().length === 0;
+export const isStartAVowel = (str: string) => 'aeiouy'.includes(str[0]);
 export const round = (n: number, precision: number) => {
   const prec = pow(10, precision);
   return Math.round(n * prec) / prec;

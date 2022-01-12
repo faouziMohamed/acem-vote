@@ -8,27 +8,28 @@ import Image from 'next/image';
 import { FC, useState } from 'react';
 
 import type { ICandidateDetails } from '@/db/models/models.types';
+import { isStartAVowel } from '@/utils/lib.utils';
 
-import ScrollDialog from '../dialogs/ScrollDialog';
+import CandidateDialog from '../dialogs/ScrollDialog';
 
-const ImgMediaCard: FC<{ candidate: ICandidateDetails }> = ({ candidate }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CandidateCard: FC<{ candidate: ICandidateDetails }> = ({ candidate }) => {
+  const [open, setOpen] = useState(false);
+  const article = isStartAVowel(candidate.firstname) ? "d'" : `de `;
   return (
     <>
-      <ScrollDialog candidate={candidate} isOpen={isOpen === true} />
-
-      <Card className='h-[24rem] w-full 2xs:w-[20rem] '>
+      <CandidateDialog candidate={candidate} open={open} setOpen={setOpen} />
+      <Card className='h-[24rem] w-full 2xs:w-[20rem] flex flex-col items-center'>
         <CardActionArea
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-          className='h-full relative flex flex-col justify-between gap-1 pt-1'
+          onClick={() => setOpen(true)}
+          className='relative grow flex flex-col justify-between pt-2'
+          title={`Ouvrir la description ${article}${candidate.firstname}`}
         >
           <Image
             className='w-full self-center'
-            alt={`${candidate.firstname}'s picture`}
+            alt={`Avatar ${article}${candidate.firstname}`}
             height={140}
             width={140}
+            objectFit='cover'
             src={candidate.avatar}
           />
           <CardContent className='text-center'>
@@ -52,13 +53,20 @@ const ImgMediaCard: FC<{ candidate: ICandidateDetails }> = ({ candidate }) => {
               {candidate.details.description}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button size='small'>Plus de détails</Button>
-          </CardActions>
         </CardActionArea>
+        <CardActions className='p-0 pb-1 flex'>
+          <Button
+            onClick={() => setOpen(true)}
+            size='medium'
+            className='w-full font-bold grow hover:bg-primary hover:text-white'
+            title={`Cliquez pour voir plus de détails sur ${candidate.firstname}`}
+          >
+            Plus de détails
+          </Button>
+        </CardActions>
       </Card>
     </>
   );
 };
 
-export default ImgMediaCard;
+export default CandidateCard;

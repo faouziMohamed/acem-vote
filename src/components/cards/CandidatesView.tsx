@@ -7,7 +7,7 @@ import { ListCard } from '@/components/cards/ListCard';
 import { BubbleLoader } from '@/components/spinners/bubble-loader';
 import { useCandidates } from '@/hooks/hooks';
 
-import ImgMediaCard from './BlockCard';
+import CandidateCard from './BlockCard';
 
 const CandidatesView: FC = () => {
   const [response] = useCandidates();
@@ -43,7 +43,7 @@ const CandidatesView: FC = () => {
       <div className='flex flex-wrap justify-center items-center gap-2 relative w-full h-fit'>
         {listView
           ? candidates.map((c) => <ListCard candidate={c} key={c.uid} />)
-          : candidates.map((c) => <ImgMediaCard candidate={c} key={c.uid} />)}
+          : candidates.map((c) => <CandidateCard candidate={c} key={c.uid} />)}
       </div>
     </div>
   );
