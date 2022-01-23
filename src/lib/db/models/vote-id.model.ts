@@ -1,5 +1,4 @@
-import type { Model } from 'mongoose';
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
 import type { IVoteIDSchema } from './models.types';
@@ -17,8 +16,8 @@ const voteIDschema = new Schema<IVoteIDSchema>(
 
 voteIDschema.index({ userID: 1 }, { unique: true });
 
-const VoteID: Model<IVoteIDSchema> =
-  global.VoteID || model('VoteID', voteIDschema);
+const VoteID = <Model<IVoteIDSchema>>(
+  (models.VoteID || model('VoteID', voteIDschema))
+);
 
-global.VoteID = VoteID;
 export default VoteID;

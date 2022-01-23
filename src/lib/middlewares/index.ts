@@ -2,12 +2,7 @@
 import helmet from 'helmet';
 import nc from 'next-connect';
 
-import {
-  configSession,
-  connectDatabase,
-  cors,
-  headers,
-} from './init-middleware';
+import { configSession, connectDatabase, cors, headers } from './init';
 import passport from './passeport';
 
 const auth = nc()

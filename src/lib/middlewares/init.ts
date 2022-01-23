@@ -1,20 +1,22 @@
 import Cors from 'cors';
-import ms from 'ms';
 
 import connectDB from '@/db/config.db';
 import type { NextFunction, Request, Response } from '@/lib/lib.types';
+import { daysToSeconds } from '@/utils/lib.utils';
 
 import session from './session.lib';
 
+export const LOGIN_CK_NAME = 'sc-user';
+
 export const configSession = session({
-  name: 'sc-user',
+  name: LOGIN_CK_NAME,
   secret: process.env.SESSION_SECRET || '',
   cookieOptions: {
-    maxAge: ms('24d') / 1000,
+    maxAge: daysToSeconds(30),
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    sameSite: 'lax',
+    sameSite: true,
   },
 });
 

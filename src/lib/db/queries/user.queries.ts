@@ -1,22 +1,33 @@
-import { PipelineStage, Types } from 'mongoose';
+import type { PipelineStage } from 'mongoose';
+import { Types } from 'mongoose';
 
+import type { IdType, IUserBasic, IUserSchema } from '@/db/models/models.types';
+import { UserRole, VoteCategories } from '@/db/models/models.types';
+import User, { DEFAULT_USER_AVATAR } from '@/db/models/user.model';
 import AppError from '@/errors/app-error';
 
-import type { IdType, IUserBasic, IUserSchema } from '../models/models.types';
-import User from '../models/user.model';
+export const voteDefaults: IUserSchema['voteDetails'] = {
+  post: VoteCategories.DEFAULT,
+  votes: { yes: 0, no: 0, abstain: 0 },
+  isWinner: false,
+  depositionDate: new Date(0),
+};
 
 export async function createUser({
   orgId,
   firstname,
   lastname,
   isCandidate,
-  voteDetails,
+  voteDetails = voteDefaults,
   details,
+  isMembershipActive = false,
+  role = UserRole.USER,
+  avatar = DEFAULT_USER_AVATAR,
 }: IUserSchema) {
   const userDetails: IUserSchema['details'] = {
     city: details?.city,
-    skills: details?.skills,
-    description: details?.description,
+    skills: details?.skills || [],
+    description: details?.description || '',
   };
   if (details?.email) userDetails.email = details.email;
   if (details?.phone) userDetails.phone = details.phone;
@@ -25,6 +36,9 @@ export async function createUser({
     firstname,
     lastname,
     details: userDetails,
+    isMembershipActive,
+    role,
+    avatar,
   });
 
   if (isCandidate) {
@@ -35,12 +49,14 @@ export async function createUser({
         code: 400,
       });
     }
-    const candidateData: IUserSchema['voteDetails'] = {
+    const voteData: IUserSchema['voteDetails'] = {
       post: voteDetails.post,
-      depositionDate: voteDetails.depositionDate || new Date(Date.now()),
+      depositionDate: voteDetails.depositionDate || voteDefaults.depositionDate,
+      votes: voteDetails.votes || voteDefaults.votes,
+      isWinner: voteDetails.isWinner || voteDefaults.isWinner,
     };
     user.isCandidate = true;
-    user.voteDetails = candidateData;
+    user.voteDetails = voteData;
   }
   return user.save();
 }

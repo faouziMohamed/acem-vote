@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
 import type { IPendingRequestSchema } from './models.types';
@@ -26,8 +26,9 @@ const pendingRequestSchema: Schema<IPendingRequestSchema> = new Schema(
 
 pendingRequestSchema.index({ requestDate: -1, userID: 1 });
 
-const PendingRequest =
-  global.PendingRequest || model('PendingRequest', pendingRequestSchema);
+const PendingRequest = <Model<IPendingRequestSchema>>(
+  (models.PendingRequest || model('PendingRequest', pendingRequestSchema))
+);
 
-global.PendingRequest = PendingRequest;
+models.PendingRequest = PendingRequest;
 export default PendingRequest;

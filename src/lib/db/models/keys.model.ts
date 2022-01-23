@@ -1,11 +1,11 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { decryptMessage, encryptMessage } from '@/security/aes.utils';
 
 import { schemaOptions } from './model.utils';
 import type { IKeysSchema } from './models.types';
 
-const keysSchema: Schema<IKeysSchema> = new Schema<IKeysSchema>(
+const keysSchema = new Schema<IKeysSchema>(
   {
     email: { type: String, required: true, unique: true, lowercase: true },
     name: { type: String, required: true },
@@ -23,7 +23,7 @@ const keysSchema: Schema<IKeysSchema> = new Schema<IKeysSchema>(
 
 keysSchema.index({ email: 1, _id: 1 }, { unique: true });
 // Encrypt passphrase before saving to database
-keysSchema.pre('save', function encryptPassPhrase(next) {
+keysSchema.pre<IKeysSchema>('save', function encryptPassPhrase(next) {
   if (this.isModified('passphrase') && this.passphrase) {
     const encr = encryptMessage(
       this.passphrase,
@@ -41,6 +41,5 @@ keysSchema.pre('save', function encryptPassPhrase(next) {
 export const decryptPassphrase = (passphrase: string) =>
   decryptMessage(passphrase, process.env.ENCRYPTION_SERVER_KEY_PASSPHRASE!);
 
-const Keys = global.Keys || model('Keys', keysSchema);
-global.Keys = Keys;
+const Keys = <Model<IKeysSchema>>(models.Keys || model('Keys', keysSchema));
 export default Keys;

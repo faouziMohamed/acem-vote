@@ -1,11 +1,8 @@
 import Image from 'next/image';
 import type { FC } from 'react';
-import { useState } from 'react';
 
 import { ICandidateDetails } from '@/db/models/models.types';
 import style from '@/sass/app.module.scss';
-
-import { VoteButton } from './vote-button';
 
 interface ListCardProps {
   candidate: ICandidateDetails;
@@ -16,7 +13,6 @@ export const ListCard: FC<ListCardProps> = ({ candidate }) => {
     details: { skills, description },
     voteDetails: { post },
   } = candidate;
-  const [showBtn] = useState(false);
   return (
     <div className={style.candidate_row}>
       <div
@@ -43,7 +39,6 @@ export const ListCard: FC<ListCardProps> = ({ candidate }) => {
           <span className={style.names}>
             {candidate.firstname} {candidate.lastname}
           </span>
-          {showBtn && <VoteButton dataId={candidate.uid} />}
         </h3>
 
         <p className={style.detail_row}>

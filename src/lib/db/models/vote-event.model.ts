@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { capitalize } from '@/utils/lib.utils';
 
@@ -32,8 +32,9 @@ voteEventSchema.pre<IVoteEventSchema>('save', function preSave(next) {
 });
 
 voteEventSchema.index({ eventName: 1 }, { unique: true });
-const VoteEvent = global.VoteEvent || model('VoteEvent', voteEventSchema);
-global.VoteEvent = VoteEvent;
+const VoteEvent = <Model<IVoteEventSchema>>(
+  (models.VoteEvent || model('VoteEvent', voteEventSchema))
+);
 
 const executiveSchema = new Schema<IExecutiveEventSchema>({
   executiveMembers: {
@@ -50,17 +51,14 @@ const regionalSchema = new Schema<IRegionalEventSchema>({
     required: true,
   },
 });
+const ExecutiveEvent = <Model<IExecutiveEventSchema>>(
+  (models.executiveEvent ||
+    VoteEvent.discriminator('executiveEvent', executiveSchema))
+);
 
-const ExecutiveEvent =
-  global.ExecutiveEvent ||
-  VoteEvent.discriminator('executiveEvent', executiveSchema);
-
-global.ExecutiveEvent = ExecutiveEvent;
-
-const RegionalEvent =
-  global.RegionalEvent ||
-  VoteEvent.discriminator('regionalEvent', regionalSchema);
-
-global.RegionalEvent = RegionalEvent;
+const RegionalEvent = <Model<IRegionalEventSchema>>(
+  (models.regionalEvent ||
+    VoteEvent.discriminator('regionalEvent', regionalSchema))
+);
 
 export { ExecutiveEvent, RegionalEvent };

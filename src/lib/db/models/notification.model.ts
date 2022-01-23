@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { capitalize } from '@/utils/lib.utils';
 
@@ -18,17 +18,20 @@ const notificationSchema: Schema<INotificationSchema> = new Schema(
 );
 
 notificationSchema.index({ date: -1, title: 1, user: 1 }, { unique: true });
-notificationSchema.pre('save', function reformatValues(next) {
-  if (this.isModified('title')) {
-    this.title = capitalize(this.title);
-  }
-  if (this.isModified('message')) {
-    this.message = capitalize(this.message);
-  }
-  next();
-});
+notificationSchema.pre<INotificationSchema>(
+  'save',
+  function reformatValues(next) {
+    if (this.isModified('title')) {
+      this.title = capitalize(this.title);
+    }
+    if (this.isModified('message')) {
+      this.message = capitalize(this.message);
+    }
+    next();
+  },
+);
 
-const ANotification =
-  global.ANotification || model('ANotification', notificationSchema);
-global.ANotification = ANotification;
+const ANotification = <Model<INotificationSchema>>(
+  (models.ANotification || model('ANotification', notificationSchema))
+);
 export default ANotification;

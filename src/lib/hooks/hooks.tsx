@@ -5,7 +5,11 @@ import { useCallback, useEffect, useRef } from 'react';
 import useSWR, { KeyedMutator } from 'swr';
 
 import FuturaSpinner from '@/components/spinners/futura';
-import type { IBasicRegionalEvent, IUserBasic } from '@/db/models/models.types';
+import type {
+  IBasicRegionalEvent,
+  IUserBasic,
+  VoteCategories,
+} from '@/db/models/models.types';
 import AppError from '@/errors/app-error';
 
 import { ICandidateAPIResponse } from '../pages.types';
@@ -34,8 +38,11 @@ export const useCandidates = (region = '') => {
   return useFetch<ICandidateAPIResponse>(`/api/candidates/${region}`);
 };
 
-export const useEvents = (eid = '') => {
-  const event = useFetch<IBasicRegionalEvent>(`/api/event/${eid}`);
+export const useEvents = (eid = '', queries = '') => {
+  type IEventResponse = IBasicRegionalEvent & { posts: VoteCategories[] };
+  const event = useFetch<IEventResponse>(
+    `/api/event/${eid}${queries && `?${queries}`}`,
+  );
   return event;
 };
 

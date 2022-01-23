@@ -56,12 +56,6 @@ async function unsealCookie(
     } catch (e) {
       // If the token is invalid, we should remove it from the cookie.
       res.setHeader('Set-Cookie', serialize(name, '', { maxAge: -1 }));
-
-      // throw new AuthError({
-      //   code: 500,
-      //   message: 'Vous devez vous connecter pour continuer',
-      //   hint: 'Connectez-vous pour pour utilisez nos services',
-      // });
     }
   }
   return unsealed;

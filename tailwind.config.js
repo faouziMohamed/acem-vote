@@ -15,7 +15,8 @@ module.exports = {
       colors: {
         primary: '#000ba5',
         primaryOpaque: 'rgba(0, 9, 142, 0.39)',
-        secondary: 'rgba(0, 140, 107, 0.25)',
+        secondary: '#0E7490',
+        secondaryOpaque: 'rgba(0, 140, 107, 0.25)',
       },
       zIndex: {
         base: '1',

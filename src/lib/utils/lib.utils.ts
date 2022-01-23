@@ -16,6 +16,8 @@ export const round = (n: number, precision: number) => {
   return Math.round(n * prec) / prec;
 };
 
+export const daysToSeconds = (days: number) => (days ? days * 24 * 60 * 60 : 0);
+
 export function golfyNumber(n: number): string | number {
   const { floor, abs, log } = Math;
   const abbrev = 'kmb';

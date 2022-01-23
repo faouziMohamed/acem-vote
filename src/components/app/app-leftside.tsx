@@ -1,3 +1,7 @@
+import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
+import HowToVoteRoundedIcon from '@mui/icons-material/HowToVoteRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import PollRoundedIcon from '@mui/icons-material/PollRounded';
 import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
@@ -12,7 +16,7 @@ import FuturaSpinner from '../spinners/futura';
 export function AppLeftside({ showLeftPane }: { showLeftPane: boolean }) {
   const [user, { loading }] = useUser();
   const paneRef = useLeftPane(showLeftPane);
-  // if (loading) return <FuturaSpinner />;
+  if (loading || !user) return <FuturaSpinner />;
   // if (!loading && !user) {
   //   void Router.push('/login');
   //   return <FuturaSpinner />;
@@ -38,14 +42,14 @@ export function AppLeftside({ showLeftPane }: { showLeftPane: boolean }) {
                 <a className={style.profile_link}>
                   <div className={style.user_picture}>
                     <Image
-                      src={user!.avatar as string}
+                      src={user.avatar}
                       alt='User profile picture'
                       className={style.user_picture__img}
                       layout='fill'
                     />
                   </div>
                   <span>
-                    {user?.firstname} {user?.lastname}
+                    {user.firstname} {user.lastname}
                   </span>
                 </a>
               </Link>
@@ -63,18 +67,21 @@ function NavTabs() {
     {
       name: 'Votes',
       icon: 'fas fa-vote-yea',
+      Icon: HowToVoteRoundedIcon,
       activeTab: Router.asPath === '/vote',
       path: '/vote',
     },
     {
       name: 'Candidats',
       icon: 'fas fa-users',
+      Icon: GroupsRoundedIcon,
       activeTab: Router.asPath === '/candidates',
       path: '/candidates',
     },
     {
       name: 'Resultats',
       icon: 'fas fa-poll',
+      Icon: PollRoundedIcon,
       activeTab: Router.asPath === '/results',
       path: '/results',
     },
@@ -90,7 +97,7 @@ function NavTabs() {
                   activeTab ? style.active_tab : ''
                 }`}
               >
-                <i className={tab.icon} />
+                <tab.Icon />
                 <span className={style.nav_text}>{tab.name}</span>
               </a>
             </Link>
@@ -103,7 +110,7 @@ function NavTabs() {
             className={`${style.navlink}`}
             type='button'
           >
-            <i className='fas fa-sign-out-alt' />
+            <LogoutRoundedIcon />
             <span className={style.nav_text}>Logout</span>
           </button>
         </li>

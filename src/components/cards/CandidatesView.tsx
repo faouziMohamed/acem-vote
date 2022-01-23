@@ -23,7 +23,7 @@ const CandidatesView: FC = () => {
           hover:bg-[#dfdddd] rounded text-[#44858f] min-w-min`;
   return (
     <div className='grid grid-cols-1 p-4 min-w-[17.5rem] gap-2' tabIndex={0}>
-      <div className='flex gap-2 px-2 py-2 w-fit bg-secondary rounded justify-self-end'>
+      <div className='flex gap-2 px-2 py-2 w-fit bg-secondaryOpaque rounded justify-self-end'>
         <Button
           className={btnStyle}
           onClick={() => setListView(false)}
@@ -40,7 +40,7 @@ const CandidatesView: FC = () => {
           <FormatListBulletedRoundedIcon />
         </Button>
       </div>
-      <div className='flex flex-wrap justify-center items-center gap-2 relative w-full h-fit'>
+      <div className='list-grid'>
         {listView
           ? candidates.map((c) => <ListCard candidate={c} key={c.uid} />)
           : candidates.map((c) => <CandidateCard candidate={c} key={c.uid} />)}

@@ -1,16 +1,17 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { emailValidator, phoneValidator, startCase } from '@/utils/lib.utils';
 
 import { schemaOptions, voteCategories } from './model.utils';
 import type { IUserSchema } from './models.types';
 
+export const DEFAULT_USER_AVATAR = '/images/users/u-0.svg';
 const userSchema = new Schema<IUserSchema>(
   {
     orgId: { type: String, required: true, unique: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
-    avatar: { type: String, default: '/images/users/u-0.svg' },
+    avatar: { type: String, default: DEFAULT_USER_AVATAR },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     isFirstLogin: { type: Boolean, default: true },
     firstLoginDate: { type: Date, default: Date.now },
@@ -80,6 +81,6 @@ userSchema.pre<IUserSchema>('save', function reformatValues(next) {
   return next();
 });
 
-const User = global.User || model('User', userSchema);
-global.User = User;
+const User = <Model<IUserSchema>>(models.User || model('User', userSchema));
+
 export default User;

@@ -13,7 +13,7 @@ export default function connectDB(handler: Middleware) {
 }
 
 export async function initiateDbConnexion() {
-  const DEV_DB_URI = 'mongodb://localhost:27017/social-share';
+  const DEV_DB_URI = 'mongodb://localhost:27017/acem-evote';
   const DB_URI = process.env.DB_URI || DEV_DB_URI;
   try {
     await connect(DB_URI);

@@ -14,6 +14,7 @@ import { useEffect, useRef } from 'react';
 
 import { ICandidateDetails } from '@/lib/db/models/models.types';
 
+import { SemiGrayLine } from '../utils/Lines';
 import Transition from './Transition';
 
 interface ScrollDialogProps {
@@ -80,8 +81,7 @@ function DialogContentCard({ candidate }: { candidate: ICandidateDetails }) {
         >
           {candidate.firstname} {candidate.lastname}
         </Typography>
-        <span className='w-32 flex border-b border-gray-400 m-2' />
-
+        <SemiGrayLine />
         <Typography
           variant='body2'
           color='textSecondary'
@@ -90,8 +90,7 @@ function DialogContentCard({ candidate }: { candidate: ICandidateDetails }) {
         >
           {candidate.details.skills.join(', ')}
         </Typography>
-        <span className='w-32 flex border-b border-gray-400 m-2' />
-
+        <SemiGrayLine />
         <Typography
           variant='body2'
           color='text.secondary'

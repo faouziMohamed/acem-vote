@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
 import type { IAdminLogSchema } from './models.types';
@@ -14,6 +14,7 @@ const adminLogSchema: Schema<IAdminLogSchema> = new Schema(
 
 adminLogSchema.index({ admin: 1, logDate: -1 });
 
-const AdminLog = global.AdminLog || model('AdminLog', adminLogSchema);
-global.AdminLog = AdminLog;
+const AdminLog = <Model<IAdminLogSchema>>(
+  (models.AdminLog || model('AdminLog', adminLogSchema))
+);
 export default AdminLog;

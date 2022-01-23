@@ -9,14 +9,11 @@ export async function createLoginSession(session: Session, secret: string) {
   return token;
 }
 
-export async function getLoginSession(
-  token: string,
-  secret: string,
-): Promise<Session> {
+export async function getLoginSession(token: string, secret: string) {
   const session = <Session>await Iron.unseal(token, secret, Iron.defaults);
   let expiresAt = 0;
   if (session.createdAt && session.maxAge) {
-    expiresAt = session.createdAt + session.maxAge;
+    expiresAt = session.createdAt + session.maxAge * 1000;
   }
   // Validate the expiration date of the session
   if (session.maxAge && Date.now() > expiresAt) {

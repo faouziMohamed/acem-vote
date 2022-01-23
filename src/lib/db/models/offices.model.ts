@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { Model, model, models, Schema } from 'mongoose';
 
 import { schemaOptions } from './model.utils';
 import type {
@@ -31,14 +31,14 @@ executiveOfficeSchema.index(
   { unique: true },
 );
 
-const RegionalOffice =
-  global.RegionalOffice ||
-  officeModel.discriminator('Regional', regionalOfficeSchema);
+const RegionalOffice = <Model<IRegionalOfficeSchema>>(
+  (models.RegionalOffice ||
+    officeModel.discriminator('Regional', regionalOfficeSchema))
+);
 
-const ExecutiveOffice =
-  global.ExecutiveOffice ||
-  officeModel.discriminator('Executive', executiveOfficeSchema);
+const ExecutiveOffice = <Model<IExecutiveOfficeSchema>>(
+  (models.ExecutiveOffice ||
+    officeModel.discriminator('Executive', executiveOfficeSchema))
+);
 
-global.RegionalOffice = RegionalOffice;
-global.ExecutiveOffice = ExecutiveOffice;
 export { ExecutiveOffice, RegionalOffice };

@@ -1,25 +1,10 @@
 /* eslint-disable no-var */
 /* eslint-disable vars-on-top */
-import type { Document, Model, Types } from 'mongoose';
+import type { Document, Types } from 'mongoose';
 
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user',
-}
-
-declare global {
-  var User: Model<IUserSchema>;
-  var Keys: Model<IKeysSchema>;
-  var VoteID: Model<IVoteIDSchema>;
-  var VoteEvent: Model<IVoteEventSchema>;
-  var ExecutiveEvent: Model<IExecutiveEventSchema>;
-  var RegionalEvent: Model<IRegionalEventSchema>;
-  var Admin: Model<IAdminSchema>;
-  var AdminLog: Model<IAdminLogSchema>;
-  var ANotification: Model<INotificationSchema>;
-  var RegionalOffice: Model<IRegionalOfficeSchema>;
-  var ExecutiveOffice: Model<IExecutiveOfficeSchema>;
-  var PendingRequest: Model<IPendingRequestSchema>;
 }
 
 export enum VoteCategories {
@@ -33,58 +18,73 @@ export enum VoteCategories {
   PRESIDENT = 'Président',
   VICE_PRESIDENT = 'Vice-Président',
   COM_AUX_COMPTES = 'Commisaire aux comptes',
+  DEFAULT = 'Default',
 }
 
 export interface IUserBasic extends Express.User {
-  orgId: string;
-  firstname: string;
-  lastname: string;
-  avatar?: string;
-  role?: UserRole;
-  isFirstLogin?: boolean;
-  firstLoginDate?: Date;
-  isLocked?: boolean;
-  details?: {
-    skills?: string[];
-    description?: string;
-    city?: { cityName?: string; cityId?: string };
+  avatar: string;
+  completedEvents?: string[];
+  details: {
     email?: string;
     phone?: string;
+    skills: string[];
+    city?: { cityName?: string; cityId?: string };
+    description: string;
   };
   events?: string[];
-  completedEvents?: string[];
+  firstLoginDate?: Date;
+  firstname: string;
+  isCandidate?: boolean;
+  isFirstLogin?: boolean;
+  isLocked?: boolean;
+  isMembershipActive?: boolean;
+  lastname: string;
   missedEvents?: string[];
+  orgId: string;
+  role?: UserRole;
+  uid: string;
   votedCategories?: {
     eventID: string;
     catNames: VoteCategories[];
     voteCompleted: boolean;
   }[];
-  isCandidate?: boolean;
-  isMembershipActive?: boolean;
-  uid: string;
-  id?: string;
+  voteDetails: {
+    post: VoteCategories;
+    votes: { yes: number; no: number; abstain: number };
+    isWinner: boolean;
+    depositionDate: Date;
+  };
 }
 
+type ToOmit =
+  | 'details'
+  | 'events'
+  | 'completedEvents'
+  | 'missedEvents'
+  | 'votedCategories';
+
+type UserBasic = Omit<IUserBasic, ToOmit> & {
+  details: Omit<IUserBasic['details'], 'city'> & { city?: Types.ObjectId };
+  events?: Types.ObjectId[];
+  completedEvents?: Types.ObjectId[];
+  missedEvents?: Types.ObjectId[];
+  votedCategories?: {
+    eventId: Types.ObjectId;
+    catNames: VoteCategories[];
+    voteCompleted: boolean;
+  }[];
+};
+
+export interface IUserSchema extends UserBasic, Document {}
+
 export interface ICandidateDetails {
-  orgId: string;
-  firstname: string;
-  lastname: string;
-  avatar: string;
-  details: {
-    skills: string[];
-    description: string;
-  };
-  voteDetails: {
-    votes: {
-      yes: number;
-      no: number;
-      abstain: number;
-    };
-    isWinner: boolean;
-    depositionDate: Date | string;
-    post: string;
-  };
-  uid: string;
+  orgId: IUserBasic['orgId'];
+  firstname: IUserBasic['firstname'];
+  lastname: IUserBasic['lastname'];
+  avatar: IUserBasic['avatar'];
+  details: Omit<IUserBasic['details'], 'email' | 'phone' | 'city'>;
+  voteDetails: IUserBasic['voteDetails'];
+  uid: IUserBasic['uid'];
 }
 
 export interface ICandidateData {
@@ -113,44 +113,6 @@ export interface IBasicRegionalEvent {
   updatedAt: Date | string;
   eventId: IdType;
   endDate: Date | string;
-}
-
-export interface IUserSchema extends Document {
-  orgId: string;
-  firstname: string;
-  lastname: string;
-  avatar: string;
-  role?: UserRole;
-  isFirstLogin?: boolean;
-  firstLoginDate?: Date;
-  isLocked?: boolean;
-  details?: {
-    city?: Types.ObjectId;
-    email?: string;
-    phone?: string;
-    skills?: string[];
-    description?: string;
-  };
-  events?: Types.ObjectId[];
-  completedEvents?: Types.ObjectId[];
-  missedEvents?: Types.ObjectId[];
-  votedCategories?: {
-    eventId: Types.ObjectId;
-    catNames: VoteCategories[];
-    voteCompleted: boolean;
-  }[];
-  isCandidate?: boolean;
-  voteDetails?: {
-    post: VoteCategories;
-    votes?: {
-      yes: number;
-      no: number;
-      abstain: number;
-    };
-    isWinner?: boolean;
-    depositionDate?: Date;
-  };
-  isMembershipActive?: boolean;
 }
 
 export interface IKeysSchema extends Document {

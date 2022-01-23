@@ -31,13 +31,13 @@ export const AppLayout: FC<{ pathname: string }> = ({ children, pathname }) => {
     }
   }, []);
 
-  // if (loading) return <FuturaSpinner />;
-  // if (!loading && !user) {
-  //   void Router.push('/login');
-  //   return <FuturaSpinner />;
-  // }
+  if (loading || !user) return <FuturaSpinner />;
+  if (!loading && !user) {
+    void Router.push('/login');
+    return <FuturaSpinner />;
+  }
 
-  // if (user?.isFirstLogin) {
+  // if (user.isFirstLogin) {
   //   void Router.push('/new-paire');
   //   return <FuturaSpinner />;
   // }
@@ -46,7 +46,7 @@ export const AppLayout: FC<{ pathname: string }> = ({ children, pathname }) => {
     <>
       <noscript>You need to activate JavaScript to run this app</noscript>
       <div className='root'>
-        {/* <AppLeftside showLeftPane={showLeftPane} /> */}
+        <AppLeftside showLeftPane={showLeftPane} />
         <div className={style.main_page}>
           <Navbar inputRef={inputRef} toggleChecked={toggleChecked} />
           <main className={style.main_content_root}>
