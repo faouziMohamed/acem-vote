@@ -1,3 +1,18 @@
 @forward './partials/00-globals/global';
 @forward './partials/00-globals/buttons';
 @forward './partials/00-globals/generic-modifier';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.xbtn-primary {
+  @apply grow bg-blue-700 hover:bg-secondary active:scale-[1.05];
+}
+
+.xbtn-secondary {
+  @apply grow bg-blue-200 hover:bg-green-800 hover:text-white active:scale-[1.05];
+}
+
+.list-grid {
+  @apply flex flex-wrap justify-center items-center gap-2 relative w-full h-fit;
+}

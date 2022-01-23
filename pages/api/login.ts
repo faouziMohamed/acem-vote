@@ -5,7 +5,7 @@ import { IUserBasic } from '@/db/models/models.types';
 import AuthError from '@/errors/auth-error';
 import { handleErrors } from '@/errors/http/handlers';
 import { NextFunction, Request, Response } from '@/lib/lib.types';
-import auth from '@/middlewares/authentication';
+import auth from '@/lib/middlewares';
 import passport from '@/middlewares/passeport';
 
 const loginHandler = nc();
