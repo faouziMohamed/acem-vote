@@ -35,6 +35,7 @@ const theme = createTheme({
       `,
     },
   },
+  direction: 'ltr',
 });
 
 export default theme;

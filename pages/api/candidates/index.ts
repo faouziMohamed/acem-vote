@@ -4,9 +4,9 @@ import nextConnect from 'next-connect';
 import { getCandidatesAggregate } from '@/db/queries/candidates.queries';
 import CandidateError from '@/errors/candidate-error';
 import { handleErrors } from '@/errors/http/handlers';
+import auth from '@/lib/middlewares';
+import { checkAuth } from '@/lib/middlewares/init';
 import type { ICandidateAPIResponse } from '@/lib/pages.types';
-import auth from '@/middlewares/authentication';
-import { checkAuth } from '@/middlewares/init-middleware';
 
 const handler = nextConnect()
   .use(auth)
