@@ -100,19 +100,24 @@ export interface ICandidateData {
 }
 
 export interface IBasicRegionalEvent {
-  eventLocation: { cityName: string };
-  eventName: string;
-  startDate: Date | string;
-  eventDuration: number;
-  eventStatus: IEventStatus;
-  eventImage: string;
-  eventDescription: string;
-  candidates: IUserBasic[];
-  eventScope: string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  eventId: IdType;
-  endDate: Date | string;
+  eid: string;
+  categories: VoteCategories[];
+  event: {
+    eventLocation: { cityName: string };
+    eventName: string;
+    startDate: Date | string;
+    eventDuration: number;
+    eventStatus: IEventStatus;
+    eventImage: string;
+    eventDescription: string;
+    candidates: IUserBasic[];
+    eventScope: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    eventId: IdType;
+    endDate: Date | string;
+  };
+  payload: { post: VoteCategories; candidates: IUserBasic[] }[];
 }
 
 export interface IKeysSchema extends Document {
