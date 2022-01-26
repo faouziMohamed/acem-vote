@@ -87,7 +87,7 @@
     ],
     "jsx-a11y/no-noninteractive-tabindex": [
       "error",
-      { "tags": ["div"], "roles": ["tabpanel"] }
+      { "tags": ["div", "label"], "roles": ["tabpanel"] }
     ]
   }
 }
