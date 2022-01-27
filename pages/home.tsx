@@ -22,13 +22,15 @@ interface ICountdownTime {
 const Home: NextPage = () => {
   const [user, { loading }] = useUser();
   const [showCountdown, setShowCountdown] = useState(true);
-  const [event] = useEvents();
-  if (loading || !event) return <BubbleLoader />;
+  const [currEvent] = useEvents();
+  if (loading || !currEvent) return <BubbleLoader />;
   if (user) {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Router.push('/vote');
     return <FuturaSpinner />;
   }
+
+  const { event } = currEvent;
 
   const Renderer = ({ days, hours, minutes, seconds }: ICountdownTime) => (
     <CountdownView
@@ -127,8 +129,8 @@ function Features() {
     'Gestion des candidats et élections',
     'Chiffrement bout-à-bout (Possibilité de triche très bas)',
   ];
-  const [event] = useEvents();
-
+  const [currEvent] = useEvents();
+  const { event } = currEvent!;
   const Rendrer = ({ days, hours, minutes, seconds }: ICountdownTime) => (
     <div>
       <small>
@@ -157,7 +159,7 @@ function Features() {
           >
             Commencer maintenant{' '}
             <Countdown
-              date={new Date(event!.startDate)}
+              date={new Date(event.startDate)}
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderer={(props) => <Rendrer {...props} />}
             />
